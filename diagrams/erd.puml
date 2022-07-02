@@ -1,0 +1,40 @@
+@startuml
+skinparam linetype ortho
+
+entity Court {
+    * id 
+    --
+    - type
+}
+
+entity CourtType {
+    * id
+    --
+    - name 
+    - price 
+}
+
+entity Reservation {
+    * id
+    --
+    - court 
+    - start
+    - end 
+    - user 
+
+}
+
+entity User {
+    * id 
+    --
+    - name 
+    - phone_number 
+}
+
+Court }|--o| CourtType : type
+Reservation }|--o| Court : court
+Reservation }|--o| User : user
+ 
+
+
+@enduml
