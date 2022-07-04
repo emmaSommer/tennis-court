@@ -26,6 +26,11 @@ public class CourtController extends EntityController<Court> {
         return super.getAll();
     }
 
+    @Override
+    public String getRootName() {
+        return "courts";
+    }
+
     @GetMapping("/courts/{id}")
     @Override
     public EntityModel<Court> getEntityModel(@PathVariable Long id) {
@@ -45,6 +50,6 @@ public class CourtController extends EntityController<Court> {
         }
         Court entity = oldEntity.orElseThrow();
         entity.setType(newEntity.getType());
-        return super.getRepository().save(entity).toModel();
+        return super.addEntity(entity);
     }
 }

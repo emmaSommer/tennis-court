@@ -50,12 +50,4 @@ public class Court extends SystemEntity<Court> {
         this.id = id;
     }
 
-    @Override
-    public EntityModel<Court> toModel() {
-        return EntityModel.of(
-                this,
-                WebMvcLinkBuilder.linkTo(methodOn(CourtController.class).getEntityModel(getId())).withSelfRel(),
-                linkTo(methodOn(CourtController.class).getAll()).withRel("courts")
-        );
-    }
 }

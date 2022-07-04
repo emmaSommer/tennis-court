@@ -17,6 +17,8 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
  */
 public abstract class EntityController<T extends SystemEntity<T>> {
 
+    public abstract String getRootName();
+
     private final JpaRepository<T, Long> repository;
 
     public EntityController(JpaRepository<T, Long> repository) {
@@ -28,7 +30,7 @@ public abstract class EntityController<T extends SystemEntity<T>> {
     }
 
     public EntityModel<T> getEntityModel(Long id){
-        return getEntity(id).toModel();
+        return SystemEntity.toModel(getEntity(id), this);
     }
 
     public T getEntity(Long id){
@@ -38,7 +40,7 @@ public abstract class EntityController<T extends SystemEntity<T>> {
     public CollectionModel<EntityModel<T>> getAll(){
         List<EntityModel<T>> entities =  this.repository.findAll()
                 .stream()
-                .map(SystemEntity::toModel)
+                .map(entity -> SystemEntity.toModel(entity, this))
                 .collect(Collectors.toList());
         return CollectionModel.of(
                 entities,
@@ -50,7 +52,8 @@ public abstract class EntityController<T extends SystemEntity<T>> {
         if (entity == null){
             throw new IllegalArgumentException();
         }
-        return repository.save(entity).toModel();
+        repository.save(entity);
+        return SystemEntity.toModel(entity, this);
     }
 
     public CollectionModel<EntityModel<T>> deleteEntity(Long id){

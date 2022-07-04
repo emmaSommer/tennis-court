@@ -63,14 +63,4 @@ public class CourtType extends SystemEntity<CourtType> {
         return id;
     }
 
-    @Override
-    public EntityModel<CourtType> toModel() {
-        return EntityModel.of(
-                this,
-                WebMvcLinkBuilder.linkTo(methodOn(CourtTypeController.class).getEntityModel(getId())).withSelfRel(),
-                linkTo(methodOn(CourtTypeController.class).getAll()).withRel("court_types")
-        );
-    }
-
-
 }
