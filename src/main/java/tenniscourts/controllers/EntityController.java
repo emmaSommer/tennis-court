@@ -15,7 +15,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 /**
  * @author Emma Sommerova
  */
-public abstract class EntityController<T extends SystemEntity<T>> {
+public abstract class EntityController<T extends SystemEntity> {
 
     public abstract String getRootName();
 

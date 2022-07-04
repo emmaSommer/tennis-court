@@ -11,9 +11,9 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 /**
  * @author Emma Sommerova
  */
-public abstract class SystemEntity<T> {
+public abstract class SystemEntity {
 
-    public static <S extends SystemEntity<S>> EntityModel<S> toModel(S entity, EntityController<S> controller) {
+    public static <S extends SystemEntity> EntityModel<S> toModel(S entity, EntityController<S> controller) {
         return EntityModel.of(
                 entity,
                 linkTo(methodOn(controller.getClass()).getEntityModel(entity.getId())).withSelfRel(),
