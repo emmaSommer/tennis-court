@@ -16,7 +16,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
  */
 
 @RestController
-public class CourtController {
+public class CourtController extends EntityController<Court> {
 
     private final CourtRepository repository;
 
@@ -24,46 +24,15 @@ public class CourtController {
         this.repository = repository;
     }
 
-
-    // Aggregate root
-    // tag::get-aggregate-root[]
-    @GetMapping("/Courts")
-    String all() {
-        List<Court> Courts = repository.
-                findAll();
-        return Courts.toString();
-    }
-    // end::get-aggregate-root[]
-
-    @PostMapping("/Courts")
-    Court newCourt(@RequestBody Court newCourt) {
-        return repository.save(newCourt);
+    @GetMapping("/courts")
+    @Override
+    public CollectionModel<EntityModel<Court>> getAll() {
+        return super.getAll(repository.findAll());
     }
 
-    // Single item
-
-    @GetMapping("/Courts/{id}")
-    String one(@PathVariable Long id) throws Exception {
-
-        Court Court = repository.findById(id) //
-                .orElseThrow(() -> new Exception(String.valueOf(id)));
-
-        return Court.toString();
-    }
-
-    @PutMapping("/Courts/{id}")
-    Court replaceCourt(@RequestBody Court newCourt, @PathVariable Long id) {
-
-        return repository.findById(id)
-
-                .orElseGet(() -> {
-                    newCourt.setId(id);
-                    return repository.save(newCourt);
-                });
-    }
-
-    @DeleteMapping("/Courts/{id}")
-    void deleteCourt(@PathVariable Long id) {
-        repository.deleteById(id);
+    @GetMapping("/courts/{id}")
+    @Override
+    public EntityModel<Court> getEntity(@PathVariable Long id) {
+        return super.getEntity(id, repository.findById(id).orElseThrow());
     }
 }
