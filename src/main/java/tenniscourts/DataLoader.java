@@ -8,11 +8,15 @@ import org.springframework.context.annotation.Configuration;
 import tenniscourts.entities.Court;
 import tenniscourts.entities.CourtType;
 import tenniscourts.entities.Client;
+import tenniscourts.entities.Reservation;
 import tenniscourts.storage.CourtRepository;
 import tenniscourts.storage.CourtTypeRepository;
 import tenniscourts.storage.ClientRepository;
+import tenniscourts.storage.ReservationRepository;
 
 import java.math.BigDecimal;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -26,19 +30,45 @@ public class DataLoader {
     @Bean
     CommandLineRunner loadData(CourtRepository courtRepo,
                                CourtTypeRepository courtTypeRepo,
-                               ClientRepository userRepo) {
+                               ClientRepository userRepo,
+                               ReservationRepository reservationRepo) {
         Logger log = LoggerFactory.getLogger(DataLoader.class);
         List<CourtType> courtTypes = getCourtTypes();
+        List<Court> courts = getCourts(courtTypes);
         List<Client> users = getUsers();
+        List<Reservation> reservations = getReservations(courts, users);
         return args -> {
             log.info("Load" + userRepo.saveAll(users));
             log.info("Load " + courtTypeRepo.saveAll(courtTypes));
-            log.info("Load " + courtRepo.save(new Court(courtTypes.get(0))));
-            log.info("Load " + courtRepo.save(new Court(courtTypes.get(1))));
-            log.info("Load " + courtRepo.save(new Court(courtTypes.get(2))));
+            log.info("Load " + courtRepo.saveAll(courts));
+            log.info("Load " + reservationRepo.saveAll(reservations));
         };
 
 
+    }
+
+    private List<Reservation> getReservations(List<Court> courts, List<Client> clients) {
+        List<Reservation> reservations = new ArrayList<>();
+        Date date = Date.valueOf(LocalDate.now());
+        for (Court court: courts
+             ) {
+            for (Client client: clients
+                 ) {
+                reservations.add(new Reservation(date, date, court, client));
+
+            }
+
+        }
+        return reservations;
+    }
+
+    private List<Court> getCourts(List<CourtType> courtTypes) {
+        List<Court> courts = new ArrayList<>();
+        for (CourtType type:courtTypes
+             ) {
+            courts.add(new Court(type));
+        }
+        return courts;
     }
 
     List<CourtType> getCourtTypes() {
