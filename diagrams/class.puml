@@ -22,12 +22,12 @@ package Entities {
         + CourtType(name: String, price: BigDecimal)
     }
 
-    class User extends SystemEntity {
+    class Client extends SystemEntity {
         - id : Long
         - name : String
         - phone_number : String
-        + User()
-        + User(name: String, phone_number: String)
+        + Client()
+        + Client(name: String, phone_number: String)
     }
 
     class Reservation extends SystemEntity {
@@ -36,10 +36,10 @@ package Entities {
         - end : DateTime
         + Reservation()
         + Reservation(start: DateTime, end: DateTime, 
-        court: Court, user: User)
+        court: Court, client: Client)
     }
     Reservation "0..*"-r->"1" Court : court
-    Reservation "0..*"-r->"1" User : user
+    Reservation "0..*"-r->"1" Client : client
 }
 
 package Storage {
@@ -90,14 +90,14 @@ package Controllers {
     class UserController extends EntityController {
         + addEntity(
             name: String, 
-            phoneNumber: String) : EntityModel<User>
+            phoneNumber: String) : EntityModel<Client>
     }
 
     class ReservationController extends EntityController {
         + addEntity(
             start: DateTime, 
             end: DateTime, 
-            court: Court, user: User) : EnityModel<Reservation>
+            court: Court, client: Client) : EnityModel<Reservation>
     }
 
     class RequestController {
