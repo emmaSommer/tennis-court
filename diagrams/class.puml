@@ -1,0 +1,139 @@
+@startuml
+skinparam linetype ortho
+
+package Entities {
+    abstract class SystemEntity<T>{
+        + toModel() : EntityModel<T>
+    }
+
+    class Court extends SystemEntity{
+        - id : Long
+        + Court()
+        + Court(courtType: CourtType)
+    }
+
+    Court "0..*"-r->"1" CourtType : type
+
+    class CourtType extends SystemEntity{
+        - id : Long
+        - name : String
+        - price : BigDecimal
+        + CourtType()
+        + CourtType(name: String, price: BigDecimal)
+    }
+
+    class User extends SystemEntity {
+        - id : Long
+        - name : String
+        - phone_number : String
+        + User()
+        + User(name: String, phone_number: String)
+    }
+
+    class Reservation extends SystemEntity {
+        - id : Long
+        - start : DateTime
+        - end : DateTime
+        + Reservation()
+        + Reservation(start: DateTime, end: DateTime, 
+        court: Court, user: User)
+    }
+    Reservation "0..*"-r->"1" Court : court
+    Reservation "0..*"-r->"1" User : user
+}
+
+package Storage {
+
+    class JPARepository<SystemEntity> {
+
+        + findAll() : List<SystemEntity>
+        + findOne(id : Long) : Optional<SystemEntity>
+        + save(entity : SystemEntity) : SystemEntity
+        + delete(id : Long)
+    }
+
+    JPARepository .r.> SystemEntity : <<agreggates>>
+
+    class CourtRepository extends JPARepository{}
+
+    class CourtTypeRepository extends JPARepository{}
+
+    class UserRepository extends JPARepository{}
+
+    class ReservationRepository extends JPARepository {}
+}
+
+package Controllers {
+
+    class EntityController {
+        + addEntity(entity : SystemEntity) : EntityModel<SystemEntity>
+        + deleteEntity(id : Long) : CollectionModel<EntityModel<SystemEntity>>
+        + updateEntity(id: Long, newEntity : SystemEntity) : EntityModel<SystemEntity>
+        + getAll() : CollectionModel<EntityModel<SystemEntity>>
+        + getEntity(id : Long) : EntityModel<SystemEntity>
+    }
+    EntityController ----> JPARepository : repository
+    EntityController ..> SystemEntity : <<manages>>
+
+    class CourtController extends EntityController{
+        + addEntity(
+            courtType: CourtType) : EntityModel<Court>
+
+    }
+
+    class CourtTypeController extends EntityController{
+        + addEntity(
+            name: String, 
+            price: BigDecimal) : EntityModel<CourtType>
+    }
+
+    class UserController extends EntityController {
+        + addEntity(
+            name: String, 
+            phoneNumber: String) : EntityModel<User>
+    }
+
+    class ReservationController extends EntityController {
+        + addEntity(
+            start: DateTime, 
+            end: DateTime, 
+            court: Court, user: User) : EnityModel<Reservation>
+    }
+
+    class RequestController {
+        + getCourts()
+        + getCourt(id)
+    }
+
+    CourtController <-- RequestController : courtController
+    CourtTypeController <-- RequestController : courtTypeController
+    UserController <-- RequestController : userController
+    ReservationController <-- RequestController : reservationController
+
+    class EntityNotFoundException {
+        + EntityNotFoundException() -> throws RuntimeException
+    }
+    EntityController .r.> EntityNotFoundException : <<throws>>
+    
+
+    'CourtController ..> Court : <<manages>>
+    'CourtTypeController ..> CourtType : <<manages>>
+}
+
+package Configuration{
+
+    class DataLoader {
+        + loadData()
+        - generateData()
+        - loadFromStorage()
+    }
+
+    DataLoader ..> Entities : <<initiate>>
+
+}
+
+
+
+
+
+@enduml
