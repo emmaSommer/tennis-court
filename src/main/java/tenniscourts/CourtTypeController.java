@@ -16,6 +16,7 @@ public class CourtTypeController extends EntityController<CourtType> {
     private final CourtTypeRepository repository;
 
     public CourtTypeController(CourtTypeRepository repository) {
+        super(repository);
         this.repository = repository;
     }
 
@@ -23,13 +24,13 @@ public class CourtTypeController extends EntityController<CourtType> {
     @GetMapping("/court_types")
     @Override
     public CollectionModel<EntityModel<CourtType>> getAll() {
-        return super.getAll(repository.findAll());
+        return super.getAll();
     }
 
     @GetMapping("/court_types/{id}")
     @Override
     public EntityModel<CourtType> getEntity(@PathVariable Long id) {
-        return super.getEntity(id, repository.findById(id).orElseThrow());
+        return super.getEntity(id);
     }
 
 }

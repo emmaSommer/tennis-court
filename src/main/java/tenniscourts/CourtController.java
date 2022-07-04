@@ -18,21 +18,19 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RestController
 public class CourtController extends EntityController<Court> {
 
-    private final CourtRepository repository;
-
     CourtController(CourtRepository repository) {
-        this.repository = repository;
+        super(repository);
     }
 
     @GetMapping("/courts")
     @Override
     public CollectionModel<EntityModel<Court>> getAll() {
-        return super.getAll(repository.findAll());
+        return super.getAll();
     }
 
     @GetMapping("/courts/{id}")
     @Override
     public EntityModel<Court> getEntity(@PathVariable Long id) {
-        return super.getEntity(id, repository.findById(id).orElseThrow());
+        return super.getEntity(id);
     }
 }

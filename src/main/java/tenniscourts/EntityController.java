@@ -1,5 +1,6 @@
 package tenniscourts;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 
@@ -15,19 +16,23 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
  */
 public abstract class EntityController<T extends SystemEntity<T>> {
 
-    public abstract CollectionModel<EntityModel<T>> getAll();
+    private final JpaRepository<T, Long> repository;
 
-    public abstract EntityModel<T> getEntity(Long id);
+    public EntityController(JpaRepository<T, Long> repository) {
+        this.repository = repository;
+    }
 
-    public EntityModel<T> getEntity(Long id, T entity){
-        if (entity == null) {
-            throw new RuntimeException(String.valueOf(id));
-        }
+    //public abstract CollectionModel<EntityModel<T>> getAll();
+
+    //public abstract EntityModel<T> getEntity(Long id);
+
+    public EntityModel<T> getEntity(Long id){
+        T entity = repository.findById(id).orElseThrow();
         return entity.toModel();
     }
 
-    public CollectionModel<EntityModel<T>> getAll(List<T> foundEntities){
-        List<EntityModel<T>> entities =  foundEntities
+    public CollectionModel<EntityModel<T>> getAll(){
+        List<EntityModel<T>> entities =  this.repository.findAll()
                 .stream()
                 .map(SystemEntity::toModel)
                 .collect(Collectors.toList());
