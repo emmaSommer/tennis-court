@@ -15,19 +15,19 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
  */
 public abstract class EntityController<T extends SystemEntity<T>> {
 
-    public abstract List<T> getAll();
+    public abstract CollectionModel<EntityModel<T>> getAll();
 
-    public abstract Optional<T> getEntity(Long id);
+    public abstract EntityModel<T> getEntity(Long id);
 
-    public EntityModel<T> findById(Long id){
-        T entity = getEntity(id) //
-                .orElseThrow(() -> new RuntimeException(String.valueOf(id)));
-
+    public EntityModel<T> getEntity(Long id, T entity){
+        if (entity == null) {
+            throw new RuntimeException(String.valueOf(id));
+        }
         return entity.toModel();
     }
 
-    public CollectionModel<EntityModel<T>> findAll(){
-        List<EntityModel<T>> entities =  getAll()
+    public CollectionModel<EntityModel<T>> getAll(List<T> foundEntities){
+        List<EntityModel<T>> entities =  foundEntities
                 .stream()
                 .map(SystemEntity::toModel)
                 .collect(Collectors.toList());

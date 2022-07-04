@@ -6,9 +6,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-import java.util.Optional;
-
 /**
  * @author Emma Sommerova
  */
@@ -25,24 +22,14 @@ public class CourtTypeController extends EntityController<CourtType> {
 
     @GetMapping("/court_types")
     @Override
-    public CollectionModel<EntityModel<CourtType>> findAll(){
-        return super.findAll();
+    public CollectionModel<EntityModel<CourtType>> getAll() {
+        return super.getAll(repository.findAll());
     }
 
     @GetMapping("/court_types/{id}")
     @Override
-    public EntityModel<CourtType> findById(@PathVariable Long id){
-        return super.findById(id);
+    public EntityModel<CourtType> getEntity(@PathVariable Long id) {
+        return super.getEntity(id, repository.findById(id).orElseThrow());
     }
 
-
-    @Override
-    public List<CourtType> getAll() {
-        return repository.findAll();
-    }
-
-    @Override
-    public Optional<CourtType> getEntity(Long id) {
-        return repository.findById(id);
-    }
 }
