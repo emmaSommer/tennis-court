@@ -1,15 +1,10 @@
 package tenniscourts;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+import java.util.Optional;
 
 /**
  * @author Emma Sommerova
@@ -30,7 +25,23 @@ public class CourtController extends EntityController<Court> {
 
     @GetMapping("/courts/{id}")
     @Override
-    public EntityModel<Court> getEntity(@PathVariable Long id) {
-        return super.getEntity(id);
+    public EntityModel<Court> getEntityModel(@PathVariable Long id) {
+        return super.getEntityModel(id);
+    }
+
+    public EntityModel<Court> addEntity(CourtType courtType){
+        Court court = new Court(courtType);
+        return super.addEntity(court);
+    }
+
+    public EntityModel<Court> updateEntity(Long id, Court newEntity){
+
+        Optional<Court> oldEntity = super.getRepository().findById(id);
+        if (oldEntity.isEmpty()){
+            return super.addEntity(newEntity);
+        }
+        Court entity = oldEntity.orElseThrow();
+        entity.setType(newEntity.getType());
+        return super.getRepository().save(entity).toModel();
     }
 }

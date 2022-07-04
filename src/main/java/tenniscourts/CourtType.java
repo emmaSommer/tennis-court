@@ -65,7 +65,7 @@ public class CourtType extends SystemEntity<CourtType>{
     public EntityModel<CourtType> toModel() {
         return EntityModel.of(
                 this,
-                linkTo(methodOn(CourtTypeController.class).getEntity(getId())).withSelfRel(),
+                linkTo(methodOn(CourtTypeController.class).getEntityModel(getId())).withSelfRel(),
                 linkTo(methodOn(CourtTypeController.class).getAll()).withRel("court_types")
         );
     }

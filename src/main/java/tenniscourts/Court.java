@@ -6,7 +6,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import java.math.BigDecimal;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -53,7 +52,7 @@ public class Court extends SystemEntity<Court>{
     public EntityModel<Court> toModel() {
         return EntityModel.of(
                 this,
-                linkTo(methodOn(CourtController.class).getEntity(getId())).withSelfRel(),
+                linkTo(methodOn(CourtController.class).getEntityModel(getId())).withSelfRel(),
                 linkTo(methodOn(CourtController.class).getAll()).withRel("courts")
         );
     }

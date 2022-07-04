@@ -5,8 +5,8 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.Optional;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -22,13 +22,16 @@ public abstract class EntityController<T extends SystemEntity<T>> {
         this.repository = repository;
     }
 
-    //public abstract CollectionModel<EntityModel<T>> getAll();
+    public JpaRepository<T, Long> getRepository() {
+        return repository;
+    }
 
-    //public abstract EntityModel<T> getEntity(Long id);
+    public EntityModel<T> getEntityModel(Long id){
+        return getEntity(id).toModel();
+    }
 
-    public EntityModel<T> getEntity(Long id){
-        T entity = repository.findById(id).orElseThrow();
-        return entity.toModel();
+    public T getEntity(Long id){
+        return repository.findById(id).orElseThrow();
     }
 
     public CollectionModel<EntityModel<T>> getAll(){
@@ -40,6 +43,26 @@ public abstract class EntityController<T extends SystemEntity<T>> {
                 entities,
                 linkTo(methodOn(this.getClass()).getAll()).withSelfRel()
         );
+    }
+
+    public EntityModel<T> addEntity(T entity){
+        if (entity == null){
+            throw new IllegalArgumentException();
+        }
+        return repository.save(entity).toModel();
+    }
+
+    public CollectionModel<EntityModel<T>> deleteEntity(Long id){
+        repository.deleteById(id);
+        return getAll();
+    }
+
+    public EntityModel<T> updateEntity(Long id, T newEntity){
+        Optional<T> entity = repository.findById(id);
+        if(entity.isEmpty()){
+            return addEntity(newEntity);
+        }
+        return null;
     }
 
 }

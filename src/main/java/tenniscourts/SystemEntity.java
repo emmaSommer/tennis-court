@@ -8,4 +8,5 @@ import org.springframework.hateoas.EntityModel;
 public abstract class SystemEntity<T> {
 
     public abstract EntityModel<T> toModel();
+
 }
