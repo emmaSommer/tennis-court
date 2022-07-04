@@ -1,21 +1,16 @@
-package tenniscourts;
-
-import org.springframework.hateoas.EntityModel;
+package tenniscourts.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.math.BigDecimal;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
 /**
  * @author Emma Sommerova
  */
 
 @Entity
-public class CourtType extends SystemEntity<CourtType>{
+public class CourtType extends SystemEntity {
 
     @Id
     @GeneratedValue
@@ -60,15 +55,5 @@ public class CourtType extends SystemEntity<CourtType>{
     public Long getId() {
         return id;
     }
-
-    @Override
-    public EntityModel<CourtType> toModel() {
-        return EntityModel.of(
-                this,
-                linkTo(methodOn(CourtTypeController.class).getEntityModel(getId())).withSelfRel(),
-                linkTo(methodOn(CourtTypeController.class).getAll()).withRel("court_types")
-        );
-    }
-
 
 }

@@ -1,8 +1,11 @@
-package tenniscourts;
+package tenniscourts.controllers;
 
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.*;
+import tenniscourts.entities.CourtType;
+import tenniscourts.entities.Court;
+import tenniscourts.storage.CourtRepository;
 
 import java.util.Optional;
 
@@ -21,6 +24,11 @@ public class CourtController extends EntityController<Court> {
     @Override
     public CollectionModel<EntityModel<Court>> getAll() {
         return super.getAll();
+    }
+
+    @Override
+    public String getRootName() {
+        return "courts";
     }
 
     @GetMapping("/courts/{id}")
@@ -42,6 +50,6 @@ public class CourtController extends EntityController<Court> {
         }
         Court entity = oldEntity.orElseThrow();
         entity.setType(newEntity.getType());
-        return super.getRepository().save(entity).toModel();
+        return super.addEntity(entity);
     }
 }
