@@ -1,8 +1,11 @@
-package tenniscourts;
+package tenniscourts.controllers;
 
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.*;
+import tenniscourts.entities.CourtType;
+import tenniscourts.entities.Court;
+import tenniscourts.storage.CourtRepository;
 
 import java.util.Optional;
 

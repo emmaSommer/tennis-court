@@ -1,4 +1,4 @@
-package tenniscourts;
+package tenniscourts.entities;
 
 import org.springframework.hateoas.EntityModel;
 

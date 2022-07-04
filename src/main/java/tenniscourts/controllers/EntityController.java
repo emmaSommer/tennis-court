@@ -1,8 +1,9 @@
-package tenniscourts;
+package tenniscourts.controllers;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import tenniscourts.entities.SystemEntity;
 
 import java.util.List;
 import java.util.stream.Collectors;

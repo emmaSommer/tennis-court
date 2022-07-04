@@ -5,7 +5,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.jpa.repository.JpaRepository;
+import tenniscourts.entities.Court;
+import tenniscourts.entities.CourtType;
+import tenniscourts.storage.CourtRepository;
+import tenniscourts.storage.CourtTypeRepository;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -34,7 +37,7 @@ public class DataLoader {
     }
 
     List<CourtType> getCourtTypes() {
-        List<CourtType> courtTypes = new ArrayList<CourtType>();
+        List<CourtType> courtTypes = new ArrayList<>();
         courtTypes.add(new CourtType("grass", new BigDecimal(100)));
         courtTypes.add(new CourtType("clay", new BigDecimal(90)));
         courtTypes.add(new CourtType("hard", new BigDecimal(80)));
