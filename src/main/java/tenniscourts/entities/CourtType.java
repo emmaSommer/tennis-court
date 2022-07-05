@@ -1,5 +1,8 @@
 package tenniscourts.entities;
 
+import tenniscourts.controllers.ClientController;
+import tenniscourts.controllers.CourtTypeController;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -12,6 +15,7 @@ import java.math.BigDecimal;
 @Entity
 public class CourtType extends SystemEntity {
 
+    public static final String entityName = "court_type";
     @Id
     @GeneratedValue
     private Long id;
@@ -31,6 +35,10 @@ public class CourtType extends SystemEntity {
         this.price = BigDecimal.ZERO;
     }
 
+    @Override
+    public String getRootName() {
+        return CourtTypeController.rootName;
+    }
 
     static public CourtType getDefault(){
         return new CourtType("default", BigDecimal.ZERO);

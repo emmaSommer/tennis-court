@@ -17,13 +17,15 @@ import java.util.Optional;
 @RestController
 public class ClientController extends EntityController<Client>{
 
+    public static final String rootName = "users";
+
     public ClientController(JpaRepository<Client, Long> repository) {
         super(repository);
     }
 
     @Override
-    public String getRootName() {
-        return "users";
+    public String getEntityName() {
+        return Client.entityName;
     }
 
     @GetMapping("/users/{id}")

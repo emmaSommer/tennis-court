@@ -1,5 +1,7 @@
 package tenniscourts.entities;
 
+import tenniscourts.controllers.ReservationController;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -13,6 +15,7 @@ import java.sql.Date;
 @Entity
 public class Reservation extends SystemEntity {
 
+    public static final String entityName = "reservation";
     @Id
     @GeneratedValue
     private Long id;
@@ -31,7 +34,12 @@ public class Reservation extends SystemEntity {
         this.client = client;
     }
 
-    public Reservation(){};
+    public Reservation(){}
+
+    @Override
+    public String getRootName(){
+        return ReservationController.rootName;
+    }
 
     @Override
     public Long getId() {

@@ -17,13 +17,15 @@ import java.util.Optional;
 @RestController
 public class ReservationController extends EntityController<Reservation> {
 
+    public static final String rootName = "reservations";
+
     public ReservationController(JpaRepository<Reservation, Long> repository) {
         super(repository);
     }
 
     @Override
-    public String getRootName() {
-        return "/reservations";
+    public String getEntityName() {
+        return Reservation.entityName;
     }
 
     @GetMapping("/reservations/{id}")

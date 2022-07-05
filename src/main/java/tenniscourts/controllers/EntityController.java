@@ -17,7 +17,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
  */
 public abstract class EntityController<T extends SystemEntity> {
 
-    public abstract String getRootName();
+    public abstract String getEntityName();
 
     private final JpaRepository<T, Long> repository;
 
@@ -34,7 +34,8 @@ public abstract class EntityController<T extends SystemEntity> {
     }
 
     public T getEntity(Long id){
-        return repository.findById(id).orElseThrow();
+        return repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(getEntityName(), id));
     }
 
     public CollectionModel<EntityModel<T>> getAll(){

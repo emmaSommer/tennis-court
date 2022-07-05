@@ -1,5 +1,7 @@
 package tenniscourts.entities;
 
+import tenniscourts.controllers.ClientController;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -11,6 +13,7 @@ import javax.persistence.Id;
 @Entity
 public class Client extends SystemEntity{
 
+    public static final String entityName = "client";
     @Id
     @GeneratedValue
     private Long id;
@@ -31,6 +34,11 @@ public class Client extends SystemEntity{
     @Override
     public Long getId() {
         return id;
+    }
+
+    @Override
+    public String getRootName() {
+        return ClientController.rootName;
     }
 
     public void setId(Long id) {

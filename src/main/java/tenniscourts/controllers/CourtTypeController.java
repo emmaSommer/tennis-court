@@ -5,6 +5,7 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import tenniscourts.entities.Client;
 import tenniscourts.entities.CourtType;
 import tenniscourts.storage.CourtTypeRepository;
 
@@ -18,6 +19,8 @@ import java.util.Optional;
 @RestController
 public class CourtTypeController extends EntityController<CourtType> {
 
+    public static final String rootName = "court_types";
+
     public CourtTypeController(CourtTypeRepository repository) {
         super(repository);
     }
@@ -30,8 +33,8 @@ public class CourtTypeController extends EntityController<CourtType> {
     }
 
     @Override
-    public String getRootName() {
-        return "court_types";
+    public String getEntityName() {
+        return CourtType.entityName;
     }
 
     @GetMapping("/court_types/{id}")
