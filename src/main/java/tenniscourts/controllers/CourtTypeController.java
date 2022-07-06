@@ -5,7 +5,6 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-import tenniscourts.entities.Client;
 import tenniscourts.entities.CourtType;
 import tenniscourts.storage.CourtTypeRepository;
 
@@ -13,6 +12,8 @@ import java.math.BigDecimal;
 import java.util.Optional;
 
 /**
+ * Entity controller for CourtType class
+ *
  * @author Emma Sommerova
  */
 
@@ -21,6 +22,11 @@ public class CourtTypeController extends EntityController<CourtType> {
 
     public static final String rootName = "court_types";
 
+    /**
+     * Constructor
+     *
+     * @param repository for the CourtType entity
+     */
     public CourtTypeController(CourtTypeRepository repository) {
         super(repository);
     }
@@ -44,7 +50,12 @@ public class CourtTypeController extends EntityController<CourtType> {
     }
 
 
-    public EntityModel<CourtType> addEntity(String name, BigDecimal price){
+    /**
+     * @param name  of the new type of court
+     * @param price for a reservation for one hour
+     * @return REST model of the new CourtType model
+     */
+    public EntityModel<CourtType> addEntity(String name, BigDecimal price) {
         CourtType courtType = new CourtType(name, price);
         return super.addEntity(courtType);
     }
@@ -58,7 +69,7 @@ public class CourtTypeController extends EntityController<CourtType> {
     @Override
     public EntityModel<CourtType> updateEntity(Long id, CourtType newEntity) {
         Optional<CourtType> oldEntity = super.getRepository().findById(id);
-        if (oldEntity.isEmpty()){
+        if (oldEntity.isEmpty()) {
             return super.addEntity(newEntity);
         }
         CourtType entity = oldEntity.orElseThrow();

@@ -2,8 +2,10 @@ package tenniscourts.controllers;
 
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.web.bind.annotation.*;
-import tenniscourts.entities.Client;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
+
 import tenniscourts.entities.CourtType;
 import tenniscourts.entities.Court;
 import tenniscourts.storage.CourtRepository;
@@ -11,6 +13,8 @@ import tenniscourts.storage.CourtRepository;
 import java.util.Optional;
 
 /**
+ * Entity controller for the Court class
+ *
  * @author Emma Sommerova
  */
 
@@ -19,6 +23,11 @@ public class CourtController extends EntityController<Court> {
 
     public static final String rootName = "courts";
 
+    /**
+     * Constructor
+     *
+     * @param repository for Court entity
+     */
     CourtController(CourtRepository repository) {
         super(repository);
     }
@@ -40,15 +49,20 @@ public class CourtController extends EntityController<Court> {
         return super.getEntityModel(id);
     }
 
-    public EntityModel<Court> addEntity(CourtType courtType){
+    /**
+     * @param courtType of the new Court instance
+     * @return REST model of the new instance
+     */
+    public EntityModel<Court> addEntity(CourtType courtType) {
         Court court = new Court(courtType);
         return super.addEntity(court);
     }
 
-    public EntityModel<Court> updateEntity(Long id, Court newEntity){
+    @Override
+    public EntityModel<Court> updateEntity(Long id, Court newEntity) {
 
         Optional<Court> oldEntity = super.getRepository().findById(id);
-        if (oldEntity.isEmpty()){
+        if (oldEntity.isEmpty()) {
             return super.addEntity(newEntity);
         }
         Court entity = oldEntity.orElseThrow();

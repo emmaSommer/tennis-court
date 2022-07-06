@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
+ * Class providing exception handlers for custom
+ * exceptions
+ *
  * @author Emma Sommerova
  */
 
@@ -16,7 +19,7 @@ public class ControllerExceptionHandler {
     @ResponseBody
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(EntityNotFoundException.class)
-    public String entityNotFoundAdvice(EntityNotFoundException e){
+    public String entityNotFoundAdvice(EntityNotFoundException e) {
         return e.getMessage();
     }
 }

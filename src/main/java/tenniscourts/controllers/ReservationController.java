@@ -11,6 +11,8 @@ import tenniscourts.entities.Reservation;
 import java.util.Optional;
 
 /**
+ * Entity controller for the Reservation class
+ *
  * @author Emma Sommerova
  */
 
@@ -19,6 +21,11 @@ public class ReservationController extends EntityController<Reservation> {
 
     public static final String rootName = "reservations";
 
+    /**
+     * Constructor
+     *
+     * @param repository for the Reservation entity
+     */
     public ReservationController(JpaRepository<Reservation, Long> repository) {
         super(repository);
     }
@@ -49,7 +56,7 @@ public class ReservationController extends EntityController<Reservation> {
     @Override
     public EntityModel<Reservation> updateEntity(Long id, Reservation newEntity) {
         Optional<Reservation> oldEntity = super.getRepository().findById(id);
-        if (oldEntity.isEmpty()){
+        if (oldEntity.isEmpty()) {
             return super.addEntity(newEntity);
         }
         Reservation entity = oldEntity.orElseThrow();
@@ -57,6 +64,6 @@ public class ReservationController extends EntityController<Reservation> {
         entity.setEndDate(newEntity.getEndDate());
         entity.setClient(newEntity.getClient());
         entity.setCourt(newEntity.getCourt());
-        return super.updateEntity(id, newEntity);
+        return super.addEntity(entity);
     }
 }
