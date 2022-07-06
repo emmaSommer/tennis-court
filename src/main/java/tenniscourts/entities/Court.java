@@ -1,6 +1,5 @@
 package tenniscourts.entities;
 
-import tenniscourts.controllers.ClientController;
 import tenniscourts.controllers.CourtController;
 
 import javax.persistence.Entity;
@@ -9,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 /**
+ * Class for representing individual courts
+ *
  * @author Emma Sommerova
  */
 
@@ -16,24 +17,33 @@ import javax.persistence.ManyToOne;
 public class Court extends SystemEntity {
 
     public static final String entityName = "court";
+
     @Id
     @GeneratedValue
     private Long id;
     @ManyToOne
     private CourtType type;
 
+
+    /**
+     * Constructor
+     *
+     * @param type of the court
+     */
     public Court(CourtType type) {
+        if (type == null) {
+            throw new NullArgumentException(entityName, "court type = null");
+        }
         this.type = type;
     }
 
+    /**
+     * Default constructor
+     */
     public Court() {
-        this.type = CourtType.getDefault();
+        this.type = new CourtType();
     }
 
-    @Override
-    public String getRootName() {
-        return CourtController.rootName;
-    }
 
     public Long getId() {
         return id;
@@ -41,6 +51,11 @@ public class Court extends SystemEntity {
 
     public CourtType getType() {
         return type;
+    }
+
+    @Override
+    public String getRootName() {
+        return CourtController.rootName;
     }
 
     public void setType(CourtType type) {
@@ -51,4 +66,11 @@ public class Court extends SystemEntity {
         this.id = id;
     }
 
+    @Override
+    public String toString() {
+        return "Court{" +
+                "id=" + id +
+                ", type=" + type +
+                '}';
+    }
 }

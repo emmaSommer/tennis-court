@@ -9,6 +9,9 @@ import javax.persistence.ManyToOne;
 import java.sql.Date;
 
 /**
+ * Class for representing individual reservation
+ * for a specific court bz a specific client
+ *
  * @author Emma Sommerova
  */
 
@@ -16,6 +19,7 @@ import java.sql.Date;
 public class Reservation extends SystemEntity {
 
     public static final String entityName = "reservation";
+
     @Id
     @GeneratedValue
     private Long id;
@@ -27,58 +31,86 @@ public class Reservation extends SystemEntity {
     @ManyToOne
     private Client client = new Client();
 
+
+    /**
+     * Constructor
+     *
+     * @param start  of the reservation
+     * @param end    of the reservation
+     * @param court  that is reserved
+     * @param client who made the reservation
+     */
     public Reservation(Date start, Date end, Court court, Client client) {
+        if (start == null || end == null || court == null || client == null) {
+            throw new NullArgumentException(entityName,
+                    "start: " + start +
+                            "end: " + end +
+                            "client: " + client +
+                            "court: " + court);
+        }
         this.startDate = start;
         this.endDate = end;
         this.court = court;
         this.client = client;
     }
 
-    public Reservation(){}
-
-    @Override
-    public String getRootName(){
-        return ReservationController.rootName;
+    /**
+     * Default constructor
+     */
+    public Reservation() {
     }
+
 
     @Override
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public Date getStartDate() {
         return startDate;
-    }
-
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
     }
 
     public Date getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
-    }
-
     public Court getCourt() {
         return court;
-    }
-
-    public void setCourt(Court court) {
-        this.court = court;
     }
 
     public Client getClient() {
         return client;
     }
 
+    @Override
+    public String getRootName() {
+        return ReservationController.rootName;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public void setCourt(Court court) {
+        this.court = court;
+    }
+
     public void setClient(Client client) {
         this.client = client;
+    }
+
+    @Override
+    public String toString() {
+        return "Reservation{" +
+                "id=" + id +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", court=" + court +
+                ", client=" + client +
+                '}';
     }
 }

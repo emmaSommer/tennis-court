@@ -7,13 +7,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 /**
+ * Class for representing clients that have
+ * reservations in the system
+ *
  * @author Emma Sommerova
  */
-
 @Entity
-public class Client extends SystemEntity{
+public class Client extends SystemEntity {
 
     public static final String entityName = "client";
+
     @Id
     @GeneratedValue
     private Long id;
@@ -21,19 +24,46 @@ public class Client extends SystemEntity{
     // todo reconsider number datatype
     private String phone_number;
 
+
+    /**
+     * Constructor
+     *
+     * @param name         of the client
+     * @param phone_number of the client
+     */
     public Client(String name, String phone_number) {
         // todo check phone number validity
+
+        if (name == null || phone_number == null) {
+            throw new NullArgumentException(
+                    entityName,
+                    "name = " + name + ", phone number: " + phone_number);
+        }
+
         this.name = name;
         this.phone_number = phone_number;
     }
-     public Client(){
+
+    /**
+     * Default constructor
+     */
+    public Client() {
         this.name = "default user";
         this.phone_number = "";
-     }
+    }
+
 
     @Override
     public Long getId() {
         return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getPhone_number() {
+        return phone_number;
     }
 
     @Override
@@ -41,23 +71,20 @@ public class Client extends SystemEntity{
         return ClientController.rootName;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
 
-    public String getPhone_number() {
-        return phone_number;
-    }
-
     public void setPhone_number(String phone_number) {
         this.phone_number = phone_number;
+    }
+
+    @Override
+    public String toString() {
+        return "Client{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", phone_number='" + phone_number + '\'' +
+                '}';
     }
 }
