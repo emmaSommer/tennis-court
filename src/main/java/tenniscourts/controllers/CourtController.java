@@ -61,12 +61,6 @@ public class CourtController extends EntityController<Court> {
     @Override
     public EntityModel<Court> updateEntity(Long id, Court newEntity) {
 
-        Optional<Court> oldEntity = super.getRepository().findById(id);
-        if (oldEntity.isEmpty()) {
-            return super.addEntity(newEntity);
-        }
-        Court entity = oldEntity.orElseThrow();
-        entity.setType(newEntity.getType());
-        return super.addEntity(entity);
+        return super.updateEntity(id, newEntity);
     }
 }

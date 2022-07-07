@@ -68,13 +68,6 @@ public class CourtTypeController extends EntityController<CourtType> {
 
     @Override
     public EntityModel<CourtType> updateEntity(Long id, CourtType newEntity) {
-        Optional<CourtType> oldEntity = super.getRepository().findById(id);
-        if (oldEntity.isEmpty()) {
-            return super.addEntity(newEntity);
-        }
-        CourtType entity = oldEntity.orElseThrow();
-        entity.setName(newEntity.getName());
-        entity.setPrice(newEntity.getPrice());
-        return super.addEntity(entity);
+        return super.updateEntity(id, newEntity);
     }
 }

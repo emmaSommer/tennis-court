@@ -84,13 +84,6 @@ public class ClientController extends EntityController<Client> {
     @Override
     public EntityModel<Client> updateEntity(Long id, Client newEntity) {
         // todo check newEntity is valid
-        Optional<Client> oldEntity = super.getRepository().findById(id);
-        if (oldEntity.isEmpty()) {
-            return super.addEntity(newEntity);
-        }
-        Client entity = oldEntity.orElseThrow();
-        entity.setName(newEntity.getName());
-        entity.setPhone_number(newEntity.getPhone_number());
-        return super.addEntity(entity);
+        return super.updateEntity(id, newEntity);
     }
 }

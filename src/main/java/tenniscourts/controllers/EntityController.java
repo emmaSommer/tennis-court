@@ -3,9 +3,11 @@ package tenniscourts.controllers;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import tenniscourts.entities.Client;
 import tenniscourts.entities.SystemEntity;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -103,7 +105,17 @@ public abstract class EntityController<T extends SystemEntity> {
      * @param newEntity entity with attributes to be given to the original
      * @return REST model of the updated entity
      */
-    // todo method abstraction through new "clone" method for systemEntities
-    public abstract EntityModel<T> updateEntity(Long id, T newEntity);
+    public EntityModel<T> updateEntity(Long id, T newEntity) {
+        if (newEntity == null){
+            throw new IllegalArgumentException("Null argument in function");
+        }
+        try {
+            T entity = getEntity(id);
+            entity.cloneAttributes(newEntity);
+            return addEntity(entity);
+        } catch (EntityNotFoundException e){
+            throw new EntityNotFoundException("Attempting to update entity not found in repository");
+        }
+    }
 
 }

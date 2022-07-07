@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import tenniscourts.entities.Reservation;
 
-import java.util.Optional;
-
 /**
  * Entity controller for the Reservation class
  *
@@ -55,15 +53,6 @@ public class ReservationController extends EntityController<Reservation> {
 
     @Override
     public EntityModel<Reservation> updateEntity(Long id, Reservation newEntity) {
-        Optional<Reservation> oldEntity = super.getRepository().findById(id);
-        if (oldEntity.isEmpty()) {
-            return super.addEntity(newEntity);
-        }
-        Reservation entity = oldEntity.orElseThrow();
-        entity.setStartDate(newEntity.getStartDate());
-        entity.setEndDate(newEntity.getEndDate());
-        entity.setClient(newEntity.getClient());
-        entity.setCourt(newEntity.getCourt());
-        return super.addEntity(entity);
+        return super.updateEntity(id, newEntity);
     }
 }
