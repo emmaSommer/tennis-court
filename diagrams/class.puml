@@ -6,6 +6,11 @@ package Entities {
         + toModel() : EntityModel<T>
     }
 
+    enum PlayType {
+        SinglesPlay
+        DoublesPlay
+    }
+
     class Court extends SystemEntity{
         - id : Long
         + Court()
@@ -36,10 +41,11 @@ package Entities {
         - end : DateTime
         + Reservation()
         + Reservation(start: DateTime, end: DateTime, 
-        court: Court, client: Client)
+        court: Court, client: Client, playType: PlayType)
     }
     Reservation "0..*"-r->"1" Court : court
-    Reservation "0..*"-r->"1" Client : client
+    Reservation "0..*"-->"1" Client : client
+    Reservation "0..*"-->"1" PlayType : playType
 }
 
 package Storage {
@@ -97,12 +103,20 @@ package Controllers {
         + addEntity(
             start: DateTime, 
             end: DateTime, 
-            court: Court, client: Client) : EnityModel<Reservation>
+            court: Court, 
+            client: Client,
+            playType : PlayType) : EnityModel<Reservation>
     }
 
     class RequestController {
-        + getCourts()
-        + getCourt(id)
+        + getCourts() : CollectionModel<EntityModel<Court>>
+        + getReservations(Long courtId) : CollectionModel<EntityModel<Reservations>>
+        + getReservations(String phoneNumber) : CollectionModel<EntityModel<Reservations>>
+        + newReservation(
+            courtId : Long, 
+            clientName: String, 
+            clientNumber: String, 
+            playType: PlayType) : BigDecimal
     }
 
     CourtController <-- RequestController : courtController
@@ -115,9 +129,6 @@ package Controllers {
     }
     EntityController .r.> EntityNotFoundException : <<throws>>
     
-
-    'CourtController ..> Court : <<manages>>
-    'CourtTypeController ..> CourtType : <<manages>>
 }
 
 package Configuration{
