@@ -5,10 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import tenniscourts.entities.Court;
-import tenniscourts.entities.CourtType;
-import tenniscourts.entities.Client;
-import tenniscourts.entities.Reservation;
+import tenniscourts.entities.*;
 import tenniscourts.storage.CourtRepository;
 import tenniscourts.storage.CourtTypeRepository;
 import tenniscourts.storage.ClientRepository;
@@ -54,7 +51,7 @@ public class DataLoader {
              ) {
             for (Client client: clients
                  ) {
-                reservations.add(new Reservation(date, date, court, client));
+                reservations.add(new Reservation(date, date, court, client, PlayType.SINGLES_PLAY));
 
             }
 

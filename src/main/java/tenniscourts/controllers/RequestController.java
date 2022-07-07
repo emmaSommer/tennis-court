@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 import tenniscourts.entities.Court;
+import tenniscourts.entities.PlayType;
 import tenniscourts.entities.Reservation;
 
 /**
@@ -32,24 +33,24 @@ public class RequestController {
     }
 
     @GetMapping("/" + CourtController.rootName)
-    public CollectionModel<EntityModel<Court>> getCourts(){
+    public CollectionModel<EntityModel<Court>> getCourts() {
         return courtController.getAll();
     }
 
     @GetMapping("/" + ReservationController.rootName + "/court_id={courtId}")
-    public CollectionModel<EntityModel<Reservation>> getReservations(@PathVariable Long courtId){
+    public CollectionModel<EntityModel<Reservation>> getReservations(@PathVariable Long courtId) {
         // todo
         return reservationController.getAll();
     }
 
     @GetMapping("/" + ReservationController.rootName + "/phone_number={phoneNumber}")
-    public CollectionModel<EntityModel<Reservation>> getReservations(@PathVariable String phoneNumber){
+    public CollectionModel<EntityModel<Reservation>> getReservations(@PathVariable String phoneNumber) {
         return reservationController.getAll();
         // todo
     }
 
     @PutMapping("/" + ReservationController.rootName)
-    public String newReservation(Long courtId, String clientName, String clientNumber, String playType){
+    public String newReservation(Long courtId, String clientName, String clientNumber, PlayType playType) {
         // todo
         return null;
     }

@@ -30,6 +30,7 @@ public class Reservation extends SystemEntity {
     private Court court = new Court();
     @ManyToOne
     private Client client = new Client();
+    private PlayType playType = PlayType.SINGLES_PLAY;
 
 
     /**
@@ -40,8 +41,9 @@ public class Reservation extends SystemEntity {
      * @param court  that is reserved
      * @param client who made the reservation
      */
-    public Reservation(Date start, Date end, Court court, Client client) {
-        if (start == null || end == null || court == null || client == null) {
+    public Reservation(Date start, Date end, Court court, Client client, PlayType playType) {
+        if (start == null || end == null ||
+                court == null || client == null || playType == null) {
             throw new NullArgumentException(entityName,
                     "start: " + start +
                             "end: " + end +
@@ -52,6 +54,7 @@ public class Reservation extends SystemEntity {
         this.endDate = end;
         this.court = court;
         this.client = client;
+        this.playType = playType;
     }
 
     /**
@@ -82,6 +85,10 @@ public class Reservation extends SystemEntity {
         return client;
     }
 
+    public PlayType getPlayType() {
+        return playType;
+    }
+
     @Override
     public String getRootName() {
         return ReservationController.rootName;
@@ -103,6 +110,10 @@ public class Reservation extends SystemEntity {
         this.client = client;
     }
 
+    public void setPlayType(PlayType playType) {
+        this.playType = playType;
+    }
+
     @Override
     public void cloneAttributes(SystemEntity newEntity) {
         if (newEntity.getClass() != Reservation.class) {
@@ -113,6 +124,7 @@ public class Reservation extends SystemEntity {
         this.endDate = newReservation.getEndDate();
         this.court = newReservation.getCourt();
         this.client = newReservation.getClient();
+        this.playType = newReservation.getPlayType();
     }
 
     @Override
@@ -123,6 +135,7 @@ public class Reservation extends SystemEntity {
                 ", endDate=" + endDate +
                 ", court=" + court +
                 ", client=" + client +
+                ", playType=" + playType +
                 '}';
     }
 }
