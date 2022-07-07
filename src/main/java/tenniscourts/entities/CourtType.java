@@ -74,6 +74,16 @@ public class CourtType extends SystemEntity {
     }
 
     @Override
+    public void cloneAttributes(SystemEntity newEntity) {
+        if (newEntity.getClass() != CourtType.class) {
+            throw new IllegalArgumentException();
+        }
+        CourtType newType = (CourtType) newEntity;
+        this.name = newType.getName();
+        this.price = newType.getPrice();
+    }
+
+    @Override
     public String toString() {
         return "CourtType{" +
                 "id=" + id +

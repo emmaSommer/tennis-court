@@ -80,6 +80,17 @@ public class Client extends SystemEntity {
     }
 
     @Override
+    public void cloneAttributes(SystemEntity newEntity) {
+        if (newEntity.getClass() != Client.class) {
+            throw new IllegalArgumentException();
+        }
+        Client newClient = (Client) newEntity;
+        this.name = newClient.getName();
+        this.phone_number = newClient.getPhone_number();
+
+    }
+
+    @Override
     public String toString() {
         return "Client{" +
                 "id=" + id +

@@ -104,6 +104,18 @@ public class Reservation extends SystemEntity {
     }
 
     @Override
+    public void cloneAttributes(SystemEntity newEntity) {
+        if (newEntity.getClass() != Reservation.class) {
+            throw new IllegalArgumentException();
+        }
+        Reservation newReservation = (Reservation) newEntity;
+        this.startDate = newReservation.getStartDate();
+        this.endDate = newReservation.getEndDate();
+        this.court = newReservation.getCourt();
+        this.client = newReservation.getClient();
+    }
+
+    @Override
     public String toString() {
         return "Reservation{" +
                 "id=" + id +

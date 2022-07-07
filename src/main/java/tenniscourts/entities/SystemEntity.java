@@ -38,4 +38,11 @@ public abstract class SystemEntity {
      */
     public abstract String getRootName();
 
+    /**
+     * Changes attributes with the values from newEntity
+     *
+     * @param newEntity with attribute values to be cloned
+     */
+    public abstract void cloneAttributes(SystemEntity newEntity);
+
 }
