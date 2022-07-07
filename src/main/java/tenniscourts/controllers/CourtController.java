@@ -10,7 +10,6 @@ import tenniscourts.entities.CourtType;
 import tenniscourts.entities.Court;
 import tenniscourts.storage.CourtRepository;
 
-import java.util.Optional;
 
 /**
  * Entity controller for the Court class
@@ -32,7 +31,6 @@ public class CourtController extends EntityController<Court> {
         super(repository);
     }
 
-    @GetMapping("/courts")
     @Override
     public CollectionModel<EntityModel<Court>> getAll() {
         return super.getAll();
