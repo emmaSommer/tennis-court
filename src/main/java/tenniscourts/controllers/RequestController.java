@@ -72,8 +72,16 @@ public class RequestController {
 
     @GetMapping("/" + ReservationController.ROOT_NAME + "/phone_number={phoneNumber}")
     public CollectionModel<EntityModel<Reservation>> getReservations(@PathVariable String phoneNumber) {
-        return reservationController.getAll();
-        // todo
+        List<EntityModel<Reservation>> reservations = reservationController.getRepository().findAll()
+                .stream()
+                .filter(reservation -> reservation.getClient().getPhone_number().equals(phoneNumber))
+                .map(reservation -> SystemEntity.toModel(reservation, reservationController))
+                .collect(Collectors.toList());
+        return CollectionModel.of(
+                reservations,
+                linkTo(methodOn(RequestController.class).getReservations(phoneNumber)).withSelfRel(),
+                linkTo(methodOn(reservationController.getClass()).getAll()).withRel(ReservationController.ROOT_NAME)
+        );
     }
 
     @PutMapping("/" + ReservationController.ROOT_NAME)
