@@ -2,15 +2,10 @@ package tenniscourts.controllers;
 
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RestController;
-import tenniscourts.entities.Court;
-import tenniscourts.entities.PlayType;
-import tenniscourts.entities.Reservation;
-import tenniscourts.entities.SystemEntity;
+import org.springframework.web.bind.annotation.*;
+import tenniscourts.entities.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,7 +38,6 @@ public class RequestController {
     }
 
     /**
-     *
      * @return courts in the system
      */
     @GetMapping("/" + CourtController.ROOT_NAME)
@@ -52,7 +46,6 @@ public class RequestController {
     }
 
     /**
-     *
      * @param courtId id
      * @return reservations on the court with the given id
      */
@@ -85,8 +78,31 @@ public class RequestController {
     }
 
     @PutMapping("/" + ReservationController.ROOT_NAME)
-    public String newReservation(Long courtId, String clientName, String clientNumber, PlayType playType) {
-        // todo
-        return null;
+    public BigDecimal newReservation(@RequestBody ReservationPayload payload) {
+        Court court = courtController.getEntity(payload.getCourtId());
+        List<Client> clients = clientController.getRepository().findAll()
+                .stream()
+                .filter(client ->
+                        client.getPhone_number().equals(payload.getPhoneNumber()))
+                .collect(Collectors.toList());
+
+        if (clients.size() > 1) {
+            throw new IllegalStateException("phone number" + payload.getPhoneNumber() + "in database is not unique");
+        }
+
+        Client client = null;
+        if (clients.isEmpty()) {
+            client = new Client(payload.getClientName(), payload.getPhoneNumber());
+        } else {
+            client = clients.get(0);
+        }
+
+        Reservation reservation = new Reservation(
+                payload.getStart(), payload.getEnd(),
+                court, client, payload.getPlayType()
+        );
+
+        reservationController.addEntity(reservation);
+        return reservation.getPrice();
     }
 }

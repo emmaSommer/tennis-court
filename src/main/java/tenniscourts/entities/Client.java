@@ -2,9 +2,7 @@ package tenniscourts.entities;
 
 import tenniscourts.controllers.ClientController;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * Class for representing clients that have
@@ -22,6 +20,7 @@ public class Client extends SystemEntity {
     private Long id;
     private String name;
     // todo reconsider number datatype
+    @Column(unique = true)
     private String phone_number;
 
 

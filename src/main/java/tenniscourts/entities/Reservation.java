@@ -6,7 +6,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import java.sql.Date;
+import java.math.BigDecimal;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 /**
  * Class for representing individual reservation
@@ -23,8 +25,8 @@ public class Reservation extends SystemEntity {
     @Id
     @GeneratedValue
     private Long id;
-    private Date startDate;
-    private Date endDate;
+    private LocalDateTime startDateTime;
+    private LocalDateTime endDateTime;
     @ManyToOne
     // todo change to static default entities
     private Court court = new Court();
@@ -41,7 +43,8 @@ public class Reservation extends SystemEntity {
      * @param court  that is reserved
      * @param client who made the reservation
      */
-    public Reservation(Date start, Date end, Court court, Client client, PlayType playType) {
+    public Reservation(LocalDateTime start, LocalDateTime end,
+                       Court court, Client client, PlayType playType) {
         if (start == null || end == null ||
                 court == null || client == null || playType == null) {
             throw new NullArgumentException(ENTITY_NAME,
@@ -50,8 +53,8 @@ public class Reservation extends SystemEntity {
                             "client: " + client +
                             "court: " + court);
         }
-        this.startDate = start;
-        this.endDate = end;
+        this.startDateTime = start;
+        this.endDateTime = end;
         this.court = court;
         this.client = client;
         this.playType = playType;
@@ -69,12 +72,12 @@ public class Reservation extends SystemEntity {
         return id;
     }
 
-    public Date getStartDate() {
-        return startDate;
+    public LocalDateTime getStartDateTime() {
+        return startDateTime;
     }
 
-    public Date getEndDate() {
-        return endDate;
+    public LocalDateTime getEndDateTime() {
+        return endDateTime;
     }
 
     public Court getCourt() {
@@ -94,12 +97,23 @@ public class Reservation extends SystemEntity {
         return ReservationController.ROOT_NAME;
     }
 
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
+    public BigDecimal getPrice() {
+        BigDecimal minutes = BigDecimal.valueOf(
+                Duration.between(startDateTime, endDateTime).toMinutes());
+
+        BigDecimal price = court.getType().getPrice();
+        if (playType == PlayType.DOUBLES_PLAY) {
+            return price.multiply(minutes).multiply(BigDecimal.valueOf(1.5));
+        }
+        return price.multiply(minutes);
     }
 
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
+    public void setStartDateTime(LocalDateTime startDateTime) {
+        this.startDateTime = startDateTime;
+    }
+
+    public void setEndDateTime(LocalDateTime endDateTime) {
+        this.endDateTime = endDateTime;
     }
 
     public void setCourt(Court court) {
@@ -120,8 +134,8 @@ public class Reservation extends SystemEntity {
             throw new IllegalArgumentException();
         }
         Reservation newReservation = (Reservation) newEntity;
-        this.startDate = newReservation.getStartDate();
-        this.endDate = newReservation.getEndDate();
+        this.startDateTime = newReservation.getStartDateTime();
+        this.endDateTime = newReservation.getEndDateTime();
         this.court = newReservation.getCourt();
         this.client = newReservation.getClient();
         this.playType = newReservation.getPlayType();
@@ -131,8 +145,8 @@ public class Reservation extends SystemEntity {
     public String toString() {
         return "Reservation{" +
                 "id=" + id +
-                ", startDate=" + startDate +
-                ", endDate=" + endDate +
+                ", startDateTime=" + startDateTime +
+                ", endDateTime=" + endDateTime +
                 ", court=" + court +
                 ", client=" + client +
                 ", playType=" + playType +

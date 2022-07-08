@@ -12,8 +12,7 @@ import tenniscourts.storage.ClientRepository;
 import tenniscourts.storage.ReservationRepository;
 
 import java.math.BigDecimal;
-import java.sql.Date;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -46,11 +45,11 @@ public class DataLoader {
 
     private List<Reservation> getReservations(List<Court> courts, List<Client> clients) {
         List<Reservation> reservations = new ArrayList<>();
-        Date date = Date.valueOf(LocalDate.now());
-        for (Court court: courts
-             ) {
-            for (Client client: clients
-                 ) {
+        LocalDateTime date = LocalDateTime.now();
+        for (Court court : courts
+        ) {
+            for (Client client : clients
+            ) {
                 reservations.add(new Reservation(date, date, court, client, PlayType.SINGLES_PLAY));
 
             }
@@ -61,8 +60,8 @@ public class DataLoader {
 
     private List<Court> getCourts(List<CourtType> courtTypes) {
         List<Court> courts = new ArrayList<>();
-        for (CourtType type:courtTypes
-             ) {
+        for (CourtType type : courtTypes
+        ) {
             courts.add(new Court(type));
         }
         return courts;
@@ -76,7 +75,7 @@ public class DataLoader {
         return courtTypes;
     }
 
-    List<Client> getUsers(){
+    List<Client> getUsers() {
         List<Client> users = new ArrayList<>();
         users.add(new Client("Bilbo Baggins", "420"));
         users.add(new Client("Saruman", "421"));
