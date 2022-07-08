@@ -47,6 +47,11 @@ public class CourtType extends SystemEntity {
         this.price = BigDecimal.ZERO;
     }
 
+    @Override
+    public boolean isValid() {
+        return name != null && !name.isBlank()
+                && price != null;
+    }
 
     public Long getId() {
         return id;

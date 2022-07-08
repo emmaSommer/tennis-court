@@ -44,6 +44,10 @@ public class Court extends SystemEntity {
         this.type = new CourtType();
     }
 
+    @Override
+    public boolean isValid() {
+        return type != null && type.isValid();
+    }
 
     public Long getId() {
         return id;

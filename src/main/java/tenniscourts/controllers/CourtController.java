@@ -32,11 +32,6 @@ public class CourtController extends EntityController<Court> {
     }
 
     @Override
-    public CollectionModel<EntityModel<Court>> getAll() {
-        return super.getAll();
-    }
-
-    @Override
     public String getEntityName() {
         return Court.ENTITY_NAME;
     }
@@ -54,11 +49,5 @@ public class CourtController extends EntityController<Court> {
     public EntityModel<Court> addEntity(CourtType courtType) {
         Court court = new Court(courtType);
         return super.addEntity(court);
-    }
-
-    @Override
-    public EntityModel<Court> updateEntity(Long id, Court newEntity) {
-
-        return super.updateEntity(id, newEntity);
     }
 }

@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 public class Reservation extends SystemEntity {
 
     public static final String ENTITY_NAME = "reservation";
-
+    public static final int MAX_INTERVAL = 10;
     @Id
     @GeneratedValue
     private Long id;
@@ -33,6 +33,11 @@ public class Reservation extends SystemEntity {
     @ManyToOne
     private Client client = new Client();
     private PlayType playType = PlayType.SINGLES_PLAY;
+
+    public static boolean validInterval(LocalDateTime start, LocalDateTime end){
+        return start != null && end != null && end.isAfter(start)
+                && Duration.between(start, end).toMinutes() < MAX_INTERVAL;
+    }
 
 
     /**
@@ -66,6 +71,13 @@ public class Reservation extends SystemEntity {
     public Reservation() {
     }
 
+    @Override
+    public boolean isValid() {
+        return validInterval(startDateTime, endDateTime)
+                && court != null && court.isValid()
+                && client != null && client.isValid()
+                && playType != null;
+    }
 
     @Override
     public Long getId() {

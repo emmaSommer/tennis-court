@@ -45,4 +45,9 @@ public abstract class SystemEntity {
      */
     public abstract void cloneAttributes(SystemEntity newEntity);
 
+    /**
+     * @return true if the entity is in valid state
+     */
+    public abstract boolean isValid();
+
 }

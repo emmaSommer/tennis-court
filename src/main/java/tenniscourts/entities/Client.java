@@ -58,6 +58,11 @@ public class Client extends SystemEntity {
         this.phone_number = "";
     }
 
+    @Override
+    public boolean isValid() {
+        return name != null && ! name.isBlank()
+                && validNumber(phone_number);
+    }
 
     @Override
     public Long getId() {

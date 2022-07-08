@@ -64,9 +64,4 @@ public class CourtTypeController extends EntityController<CourtType> {
         // TODO check if no courts exist
         return super.deleteEntity(id);
     }
-
-    @Override
-    public EntityModel<CourtType> updateEntity(Long id, CourtType newEntity) {
-        return super.updateEntity(id, newEntity);
-    }
 }
