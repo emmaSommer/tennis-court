@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import tenniscourts.entities.Reservation;
+import tenniscourts.storage.ReservationRepository;
 
 /**
  * Entity controller for the Reservation class
@@ -24,7 +25,7 @@ public class ReservationController extends EntityController<Reservation> {
      *
      * @param repository for the Reservation entity
      */
-    public ReservationController(JpaRepository<Reservation, Long> repository) {
+    public ReservationController(ReservationRepository repository) {
         super(repository);
     }
 

@@ -9,6 +9,13 @@ import org.springframework.web.bind.annotation.RestController;
 import tenniscourts.entities.Court;
 import tenniscourts.entities.PlayType;
 import tenniscourts.entities.Reservation;
+import tenniscourts.entities.SystemEntity;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 /**
  * REST endpoints for application
@@ -51,8 +58,16 @@ public class RequestController {
      */
     @GetMapping("/" + ReservationController.ROOT_NAME + "/court_id={courtId}")
     public CollectionModel<EntityModel<Reservation>> getReservations(@PathVariable Long courtId) {
-        // todo
-        return reservationController.getAll();
+        List<EntityModel<Reservation>> reservations = reservationController.getRepository().findAll()
+                .stream()
+                .filter(reservation -> reservation.getCourt().getId().equals(courtId))
+                .map(reservation -> SystemEntity.toModel(reservation, reservationController))
+                .collect(Collectors.toList());
+        return CollectionModel.of(
+                reservations,
+                linkTo(methodOn(RequestController.class).getReservations(courtId)).withSelfRel(),
+                linkTo(methodOn(reservationController.getClass()).getAll()).withRel(ReservationController.ROOT_NAME)
+        );
     }
 
     @GetMapping("/" + ReservationController.ROOT_NAME + "/phone_number={phoneNumber}")

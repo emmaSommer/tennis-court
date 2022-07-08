@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import tenniscourts.entities.Client;
+import tenniscourts.storage.ClientRepository;
 
 /**
  * Controller for the Client class
@@ -24,7 +25,7 @@ public class ClientController extends EntityController<Client> {
      *
      * @param repository for Client entity
      */
-    public ClientController(JpaRepository<Client, Long> repository) {
+    public ClientController(ClientRepository repository) {
         super(repository);
     }
 
