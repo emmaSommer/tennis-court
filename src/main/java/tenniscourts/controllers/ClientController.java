@@ -19,13 +19,20 @@ public class ClientController extends EntityController<Client> {
 
     public static final String ROOT_NAME = "users";
 
+    private final ClientRepository repository;
+
     /**
      * Constructor
      *
      * @param repository for Client entity
      */
     public ClientController(ClientRepository repository) {
-        super(repository);
+        this.repository = repository;
+    }
+
+    @Override
+    public ClientRepository getRepository() {
+        return repository;
     }
 
     @Override
@@ -59,17 +66,4 @@ public class ClientController extends EntityController<Client> {
         return super.addEntity(entity);
     }
 
-    /**
-     * @param id of the entity to be deleted
-     * @return REST model of the Client collection
-     * @throws IllegalArgumentException if the client can not
-     *                                  be deleted because of existing reservations
-     *                                  -- todo : instead of deleting client could be replaced with default "Non active user"?
-     *                                  -> only for clients without active reservation (past resrv. info)
-     */
-    @Override
-    public CollectionModel<EntityModel<Client>> deleteEntity(Long id) {
-        // todo check user does not have any reservations
-        return super.deleteEntity(id);
-    }
 }

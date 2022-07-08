@@ -51,30 +51,24 @@ public class RequestController {
      */
     @GetMapping("/" + ReservationController.ROOT_NAME + "/court_id={courtId}")
     public CollectionModel<EntityModel<Reservation>> getReservations(@PathVariable Long courtId) {
-        List<EntityModel<Reservation>> reservations = reservationController.getRepository().findAll()
-                .stream()
-                .filter(reservation -> reservation.getCourt().getId().equals(courtId))
-                .map(reservation -> SystemEntity.toModel(reservation, reservationController))
-                .collect(Collectors.toList());
-        return CollectionModel.of(
-                reservations,
+        CollectionModel<EntityModel<Reservation>> model = SystemEntity.toCollectionModel(
+                reservationController.getRepository().findAllByCourt_Id(courtId), reservationController
+        );
+
+        return model.add(
                 linkTo(methodOn(RequestController.class).getReservations(courtId)).withSelfRel(),
                 linkTo(methodOn(reservationController.getClass()).getAll()).withRel(ReservationController.ROOT_NAME)
         );
     }
 
     @GetMapping("/" + ReservationController.ROOT_NAME + "/phone_number={phoneNumber}")
+    // todo - finish this method
     public CollectionModel<EntityModel<Reservation>> getReservations(@PathVariable String phoneNumber) {
-        List<EntityModel<Reservation>> reservations = reservationController.getRepository().findAll()
-                .stream()
-                .filter(reservation -> reservation.getClient().getPhone_number().equals(phoneNumber))
-                .map(reservation -> SystemEntity.toModel(reservation, reservationController))
-                .collect(Collectors.toList());
-        return CollectionModel.of(
-                reservations,
+        CollectionModel<EntityModel<Reservation>> model =
+                SystemEntity.toCollectionModel(reservationController.getRepository().findAll(), reservationController);
+        return model.add(
                 linkTo(methodOn(RequestController.class).getReservations(phoneNumber)).withSelfRel(),
-                linkTo(methodOn(reservationController.getClass()).getAll()).withRel(ReservationController.ROOT_NAME)
-        );
+                linkTo(methodOn(ReservationController.class).getAll()).withRel(ReservationController.ROOT_NAME));
     }
 
     @PutMapping("/" + ReservationController.ROOT_NAME)
@@ -83,7 +77,7 @@ public class RequestController {
         List<Client> clients = clientController.getRepository().findAll()
                 .stream()
                 .filter(client ->
-                        client.getPhone_number().equals(payload.getPhoneNumber()))
+                        client.getPhoneNumber().equals(payload.getPhoneNumber()))
                 .collect(Collectors.toList());
 
         if (clients.size() > 1) {

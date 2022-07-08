@@ -21,15 +21,21 @@ public class CourtTypeController extends EntityController<CourtType> {
 
     public static final String ROOT_NAME = "court_types";
 
+    private final CourtTypeRepository repository;
+
     /**
      * Constructor
      *
      * @param repository for the CourtType entity
      */
     public CourtTypeController(CourtTypeRepository repository) {
-        super(repository);
+        this.repository = repository;
     }
 
+    @Override
+    public CourtTypeRepository getRepository() {
+        return repository;
+    }
 
     @GetMapping("/court_types")
     @Override
@@ -57,11 +63,5 @@ public class CourtTypeController extends EntityController<CourtType> {
     public EntityModel<CourtType> addEntity(String name, BigDecimal price) {
         CourtType courtType = new CourtType(name, price);
         return super.addEntity(courtType);
-    }
-
-    @Override
-    public CollectionModel<EntityModel<CourtType>> deleteEntity(Long id) {
-        // TODO check if no courts exist
-        return super.deleteEntity(id);
     }
 }

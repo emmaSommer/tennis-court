@@ -1,10 +1,14 @@
 package tenniscourts.entities;
 
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import tenniscourts.controllers.EntityController;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Abstract class representing a system entity
@@ -25,6 +29,14 @@ public abstract class SystemEntity {
                 entity,
                 linkTo(methodOn(controller.getClass()).getEntityModel(entity.getId())).withSelfRel(),
                 linkTo(methodOn(controller.getClass()).getAll()).withRel(entity.getRootName())
+        );
+    }
+
+    public static <S extends SystemEntity> CollectionModel<EntityModel<S>> toCollectionModel(List<S> entities, EntityController<S> controller){
+        return CollectionModel.of(
+                entities.stream()
+                        .map(entity -> SystemEntity.toModel(entity, controller))
+                        .collect(Collectors.toList())
         );
     }
 

@@ -20,9 +20,8 @@ public class Client extends SystemEntity {
     @GeneratedValue
     private Long id;
     private String name;
-    // todo reconsider number datatype
     @Column(unique = true)
-    private String phone_number;
+    private String phoneNumber;
 
     public static boolean validNumber(String phone_number) {
         return phone_number.length() == 12 &&
@@ -38,7 +37,7 @@ public class Client extends SystemEntity {
      */
     public Client(String name, String phone_number) {
         this.name = name;
-        this.phone_number = phone_number;
+        this.phoneNumber = phone_number;
         if (!this.isValid()){
             throw new IllegalStateException();
         }
@@ -49,13 +48,13 @@ public class Client extends SystemEntity {
      */
     public Client() {
         this.name = "default user";
-        this.phone_number = "";
+        this.phoneNumber = "";
     }
 
     @Override
     public boolean isValid() {
         return name != null && !name.isBlank()
-                && validNumber(phone_number);
+                && validNumber(phoneNumber);
     }
 
     @Override
@@ -67,8 +66,8 @@ public class Client extends SystemEntity {
         return name;
     }
 
-    public String getPhone_number() {
-        return phone_number;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
     @Override
@@ -80,8 +79,8 @@ public class Client extends SystemEntity {
         this.name = name;
     }
 
-    public void setPhone_number(String phone_number) {
-        this.phone_number = phone_number;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     @Override
@@ -91,7 +90,7 @@ public class Client extends SystemEntity {
         }
         Client newClient = (Client) newEntity;
         this.name = newClient.getName();
-        this.phone_number = newClient.getPhone_number();
+        this.phoneNumber = newClient.getPhoneNumber();
 
     }
 
@@ -100,7 +99,7 @@ public class Client extends SystemEntity {
         return "Client{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", phone_number='" + phone_number + '\'' +
+                ", phone_number='" + phoneNumber + '\'' +
                 '}';
     }
 

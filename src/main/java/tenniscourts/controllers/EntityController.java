@@ -18,26 +18,12 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
  */
 public abstract class EntityController<T extends SystemEntity> {
 
-    private final JpaRepository<T, Long> repository;
-
-    /**
-     * Constructor
-     *
-     * @param repository storing the entities
-     */
-    public EntityController(JpaRepository<T, Long> repository) {
-        this.repository = repository;
-    }
-
-
     /**
      * @return entity managed by the controller
      */
     public abstract String getEntityName();
 
-    public JpaRepository<T, Long> getRepository() {
-        return repository;
-    }
+    public abstract JpaRepository<T, Long> getRepository();
 
     /**
      * @param id of the entity to be modeled
@@ -54,7 +40,7 @@ public abstract class EntityController<T extends SystemEntity> {
      *                                 exist in the repository
      */
     public T getEntity(Long id) {
-        return repository.findById(id)
+        return getRepository().findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(getEntityName(), id));
     }
 
@@ -63,7 +49,7 @@ public abstract class EntityController<T extends SystemEntity> {
      * entities in the repository
      */
     public CollectionModel<EntityModel<T>> getAll() {
-        List<EntityModel<T>> entities = this.repository.findAll()
+        List<EntityModel<T>> entities = this.getRepository().findAll()
                 .stream()
                 .map(entity -> SystemEntity.toModel(entity, this))
                 .collect(Collectors.toList());
@@ -82,7 +68,7 @@ public abstract class EntityController<T extends SystemEntity> {
             // todo add error message
             throw new IllegalArgumentException();
         }
-        repository.save(entity);
+        getRepository().save(entity);
         return SystemEntity.toModel(entity, this);
     }
 
@@ -92,7 +78,7 @@ public abstract class EntityController<T extends SystemEntity> {
      * deleted entity
      */
     public CollectionModel<EntityModel<T>> deleteEntity(Long id) {
-        repository.deleteById(id);
+        getRepository().deleteById(id);
         return getAll();
     }
 

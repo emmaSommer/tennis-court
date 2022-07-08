@@ -45,12 +45,13 @@ public class DataLoader {
 
     private List<Reservation> getReservations(List<Court> courts, List<Client> clients) {
         List<Reservation> reservations = new ArrayList<>();
-        LocalDateTime date = LocalDateTime.now();
+        LocalDateTime start = LocalDateTime.now();
+        LocalDateTime end = start.plusHours(1);
         for (Court court : courts
         ) {
             for (Client client : clients
             ) {
-                reservations.add(new Reservation(date, date, court, client, PlayType.SINGLES_PLAY));
+                reservations.add(new Reservation(start, end, court, client, PlayType.SINGLES_PLAY));
 
             }
 

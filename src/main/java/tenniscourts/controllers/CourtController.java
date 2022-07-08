@@ -22,13 +22,19 @@ public class CourtController extends EntityController<Court> {
 
     public static final String ROOT_NAME = "courts";
 
+    private final CourtRepository repository;
     /**
      * Constructor
      *
      * @param repository for Court entity
      */
     CourtController(CourtRepository repository) {
-        super(repository);
+        this.repository = repository;
+    }
+
+    @Override
+    public CourtRepository getRepository() {
+        return repository;
     }
 
     @Override

@@ -1,6 +1,5 @@
 package tenniscourts.controllers;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,8 +11,6 @@ import tenniscourts.entities.PlayType;
 import tenniscourts.entities.Reservation;
 import tenniscourts.storage.ReservationRepository;
 
-import java.sql.Date;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -27,14 +24,22 @@ public class ReservationController extends EntityController<Reservation> {
 
     public static final String ROOT_NAME = "reservations";
 
+    private final ReservationRepository repository;
+
     /**
      * Constructor
      *
      * @param repository for the Reservation entity
      */
     public ReservationController(ReservationRepository repository) {
-        super(repository);
+        this.repository = repository;
     }
+
+    @Override
+    public ReservationRepository getRepository() {
+        return repository;
+    }
+
 
     @Override
     public String getEntityName() {

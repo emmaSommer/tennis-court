@@ -28,15 +28,15 @@ public class Reservation extends SystemEntity {
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
     @ManyToOne
-    // todo change to static default entities
-    private Court court = new Court();
+    private Court court;
     @ManyToOne
-    private Client client = new Client();
+    private Client client;
     private PlayType playType = PlayType.SINGLES_PLAY;
 
     public static boolean validInterval(LocalDateTime start, LocalDateTime end) {
-        return start != null && end != null && end.isAfter(start)
-                && Duration.between(start, end).toMinutes() < MAX_INTERVAL;
+        return start != null && end != null && end.isAfter(start);
+        // todo - debug this condition
+                // Duration.between(start, end).toMinutes() < MAX_INTERVAL;
     }
 
 
