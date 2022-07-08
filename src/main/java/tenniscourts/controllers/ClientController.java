@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import tenniscourts.entities.Client;
 
-import java.util.Optional;
-
 /**
  * Controller for the Client class
  *
@@ -19,7 +17,7 @@ import java.util.Optional;
 @RestController
 public class ClientController extends EntityController<Client> {
 
-    public static final String rootName = "users";
+    public static final String ROOT_NAME = "users";
 
     /**
      * Constructor
@@ -32,7 +30,7 @@ public class ClientController extends EntityController<Client> {
 
     @Override
     public String getEntityName() {
-        return Client.entityName;
+        return Client.ENTITY_NAME;
     }
 
     @GetMapping("/users/{id}")

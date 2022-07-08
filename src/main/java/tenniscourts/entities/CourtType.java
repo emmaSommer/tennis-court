@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 @Entity
 public class CourtType extends SystemEntity {
 
-    public static final String entityName = "court_type";
+    public static final String ENTITY_NAME = "court_type";
 
     @Id
     @GeneratedValue
@@ -33,7 +33,7 @@ public class CourtType extends SystemEntity {
      */
     public CourtType(String name, BigDecimal price) {
         if (name == null || price == null) {
-            throw new NullArgumentException(entityName, "name: " + name + ", price: " + price);
+            throw new NullArgumentException(ENTITY_NAME, "name: " + name + ", price: " + price);
         }
         this.name = name;
         this.price = price;
@@ -62,7 +62,7 @@ public class CourtType extends SystemEntity {
 
     @Override
     public String getRootName() {
-        return CourtTypeController.rootName;
+        return CourtTypeController.ROOT_NAME;
     }
 
     public void setName(String name) {

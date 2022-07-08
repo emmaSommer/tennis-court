@@ -9,7 +9,6 @@ import tenniscourts.entities.CourtType;
 import tenniscourts.storage.CourtTypeRepository;
 
 import java.math.BigDecimal;
-import java.util.Optional;
 
 /**
  * Entity controller for CourtType class
@@ -20,7 +19,7 @@ import java.util.Optional;
 @RestController
 public class CourtTypeController extends EntityController<CourtType> {
 
-    public static final String rootName = "court_types";
+    public static final String ROOT_NAME = "court_types";
 
     /**
      * Constructor
@@ -40,7 +39,7 @@ public class CourtTypeController extends EntityController<CourtType> {
 
     @Override
     public String getEntityName() {
-        return CourtType.entityName;
+        return CourtType.ENTITY_NAME;
     }
 
     @GetMapping("/court_types/{id}")

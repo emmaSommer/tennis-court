@@ -11,6 +11,8 @@ import tenniscourts.entities.PlayType;
 import tenniscourts.entities.Reservation;
 
 /**
+ * REST endpoints for application
+ *
  * @author Emma Sommerova
  */
 
@@ -22,6 +24,7 @@ public class RequestController {
     private final CourtTypeController courtTypeController;
     private final ReservationController reservationController;
 
+
     public RequestController(ClientController clientController,
                              CourtController courtController,
                              CourtTypeController courtTypeController,
@@ -32,24 +35,33 @@ public class RequestController {
         this.reservationController = reservationController;
     }
 
-    @GetMapping("/" + CourtController.rootName)
+    /**
+     *
+     * @return courts in the system
+     */
+    @GetMapping("/" + CourtController.ROOT_NAME)
     public CollectionModel<EntityModel<Court>> getCourts() {
         return courtController.getAll();
     }
 
-    @GetMapping("/" + ReservationController.rootName + "/court_id={courtId}")
+    /**
+     *
+     * @param courtId id
+     * @return reservations on the court with the given id
+     */
+    @GetMapping("/" + ReservationController.ROOT_NAME + "/court_id={courtId}")
     public CollectionModel<EntityModel<Reservation>> getReservations(@PathVariable Long courtId) {
         // todo
         return reservationController.getAll();
     }
 
-    @GetMapping("/" + ReservationController.rootName + "/phone_number={phoneNumber}")
+    @GetMapping("/" + ReservationController.ROOT_NAME + "/phone_number={phoneNumber}")
     public CollectionModel<EntityModel<Reservation>> getReservations(@PathVariable String phoneNumber) {
         return reservationController.getAll();
         // todo
     }
 
-    @PutMapping("/" + ReservationController.rootName)
+    @PutMapping("/" + ReservationController.ROOT_NAME)
     public String newReservation(Long courtId, String clientName, String clientNumber, PlayType playType) {
         // todo
         return null;

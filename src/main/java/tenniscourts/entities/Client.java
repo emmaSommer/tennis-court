@@ -15,7 +15,7 @@ import javax.persistence.Id;
 @Entity
 public class Client extends SystemEntity {
 
-    public static final String entityName = "client";
+    public static final String ENTITY_NAME = "client";
 
     @Id
     @GeneratedValue
@@ -36,7 +36,7 @@ public class Client extends SystemEntity {
 
         if (name == null || phone_number == null) {
             throw new NullArgumentException(
-                    entityName,
+                    ENTITY_NAME,
                     "name = " + name + ", phone number: " + phone_number);
         }
 
@@ -68,7 +68,7 @@ public class Client extends SystemEntity {
 
     @Override
     public String getRootName() {
-        return ClientController.rootName;
+        return ClientController.ROOT_NAME;
     }
 
     public void setName(String name) {

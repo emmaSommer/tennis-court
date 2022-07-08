@@ -20,7 +20,7 @@ import tenniscourts.storage.CourtRepository;
 @RestController
 public class CourtController extends EntityController<Court> {
 
-    public static final String rootName = "courts";
+    public static final String ROOT_NAME = "courts";
 
     /**
      * Constructor
@@ -38,7 +38,7 @@ public class CourtController extends EntityController<Court> {
 
     @Override
     public String getEntityName() {
-        return Court.entityName;
+        return Court.ENTITY_NAME;
     }
 
     @GetMapping("/courts/{id}")

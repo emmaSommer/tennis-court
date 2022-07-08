@@ -17,7 +17,7 @@ import tenniscourts.entities.Reservation;
 @RestController
 public class ReservationController extends EntityController<Reservation> {
 
-    public static final String rootName = "reservations";
+    public static final String ROOT_NAME = "reservations";
 
     /**
      * Constructor
@@ -30,7 +30,7 @@ public class ReservationController extends EntityController<Reservation> {
 
     @Override
     public String getEntityName() {
-        return Reservation.entityName;
+        return Reservation.ENTITY_NAME;
     }
 
     @GetMapping("/reservations/{id}")

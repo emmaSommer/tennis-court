@@ -16,7 +16,7 @@ import javax.persistence.ManyToOne;
 @Entity
 public class Court extends SystemEntity {
 
-    public static final String entityName = "court";
+    public static final String ENTITY_NAME = "court";
 
     @Id
     @GeneratedValue
@@ -32,7 +32,7 @@ public class Court extends SystemEntity {
      */
     public Court(CourtType type) {
         if (type == null) {
-            throw new NullArgumentException(entityName, "court type = null");
+            throw new NullArgumentException(ENTITY_NAME, "court type = null");
         }
         this.type = type;
     }
@@ -55,7 +55,7 @@ public class Court extends SystemEntity {
 
     @Override
     public String getRootName() {
-        return CourtController.rootName;
+        return CourtController.ROOT_NAME;
     }
 
     public void setType(CourtType type) {

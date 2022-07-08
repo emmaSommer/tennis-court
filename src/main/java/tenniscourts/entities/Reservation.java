@@ -18,7 +18,7 @@ import java.sql.Date;
 @Entity
 public class Reservation extends SystemEntity {
 
-    public static final String entityName = "reservation";
+    public static final String ENTITY_NAME = "reservation";
 
     @Id
     @GeneratedValue
@@ -44,7 +44,7 @@ public class Reservation extends SystemEntity {
     public Reservation(Date start, Date end, Court court, Client client, PlayType playType) {
         if (start == null || end == null ||
                 court == null || client == null || playType == null) {
-            throw new NullArgumentException(entityName,
+            throw new NullArgumentException(ENTITY_NAME,
                     "start: " + start +
                             "end: " + end +
                             "client: " + client +
@@ -91,7 +91,7 @@ public class Reservation extends SystemEntity {
 
     @Override
     public String getRootName() {
-        return ReservationController.rootName;
+        return ReservationController.ROOT_NAME;
     }
 
     public void setStartDate(Date startDate) {
