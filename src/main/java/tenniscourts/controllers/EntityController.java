@@ -78,7 +78,8 @@ public abstract class EntityController<T extends SystemEntity> {
      * @return REST model of the new entity
      */
     public EntityModel<T> addEntity(T entity) {
-        if (entity == null) {
+        if (entity == null || !entity.isValid()) {
+            // todo add error message
             throw new IllegalArgumentException();
         }
         repository.save(entity);
@@ -104,13 +105,15 @@ public abstract class EntityController<T extends SystemEntity> {
      * @return REST model of the updated entity
      */
     public EntityModel<T> updateEntity(Long id, T newEntity) {
-        if (newEntity == null){
-            throw new IllegalArgumentException("Null argument in function");
+        if (newEntity == null || !newEntity.isValid()){
+            // todo
+            throw new IllegalArgumentException();
         }
         try {
             T entity = getEntity(id);
             entity.cloneAttributes(newEntity);
             return addEntity(entity);
+
         } catch (EntityNotFoundException e){
             throw new EntityNotFoundException("Attempting to update entity not found in repository");
         }

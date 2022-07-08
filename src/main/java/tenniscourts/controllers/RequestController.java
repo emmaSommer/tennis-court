@@ -90,7 +90,7 @@ public class RequestController {
             throw new IllegalStateException("phone number" + payload.getPhoneNumber() + "in database is not unique");
         }
 
-        Client client = null;
+        Client client;
         if (clients.isEmpty()) {
             client = clientController.addEntity(payload.getClientName(), payload.getPhoneNumber()).getContent();
         } else {
@@ -101,7 +101,6 @@ public class RequestController {
                 payload.getStart(), payload.getEnd(),
                 court, client, payload.getPlayType()
         );
-
         reservationController.addEntity(reservation);
         return reservation.getPrice();
     }

@@ -55,12 +55,6 @@ public class ClientController extends EntityController<Client> {
      * @return REST model of the new Client instance
      */
     public EntityModel<Client> addEntity(String name, String phoneNumber) {
-        // todo check if number is valid
-        if (name == null || phoneNumber == null) {
-            // todo reconsider duplicate exception here and in class constructors
-            throw new IllegalArgumentException("null argument");
-        }
-
         Client entity = new Client(name, phoneNumber);
         return super.addEntity(entity);
     }
@@ -75,13 +69,7 @@ public class ClientController extends EntityController<Client> {
      */
     @Override
     public CollectionModel<EntityModel<Client>> deleteEntity(Long id) {
-        // todo check user doesn not have anz reservations
+        // todo check user does not have any reservations
         return super.deleteEntity(id);
-    }
-
-    @Override
-    public EntityModel<Client> updateEntity(Long id, Client newEntity) {
-        // todo check newEntity is valid
-        return super.updateEntity(id, newEntity);
     }
 }

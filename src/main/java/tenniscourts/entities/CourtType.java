@@ -32,11 +32,12 @@ public class CourtType extends SystemEntity {
      * @param price per one hour
      */
     public CourtType(String name, BigDecimal price) {
-        if (name == null || price == null) {
-            throw new NullArgumentException(ENTITY_NAME, "name: " + name + ", price: " + price);
-        }
+
         this.name = name;
         this.price = price;
+        if (!this.isValid()) {
+            throw new IllegalStateException();
+        }
     }
 
     /**

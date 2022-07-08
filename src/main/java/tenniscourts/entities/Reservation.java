@@ -34,7 +34,7 @@ public class Reservation extends SystemEntity {
     private Client client = new Client();
     private PlayType playType = PlayType.SINGLES_PLAY;
 
-    public static boolean validInterval(LocalDateTime start, LocalDateTime end){
+    public static boolean validInterval(LocalDateTime start, LocalDateTime end) {
         return start != null && end != null && end.isAfter(start)
                 && Duration.between(start, end).toMinutes() < MAX_INTERVAL;
     }
@@ -50,19 +50,14 @@ public class Reservation extends SystemEntity {
      */
     public Reservation(LocalDateTime start, LocalDateTime end,
                        Court court, Client client, PlayType playType) {
-        if (start == null || end == null ||
-                court == null || client == null || playType == null) {
-            throw new NullArgumentException(ENTITY_NAME,
-                    "start: " + start +
-                            "end: " + end +
-                            "client: " + client +
-                            "court: " + court);
-        }
         this.startDateTime = start;
         this.endDateTime = end;
         this.court = court;
         this.client = client;
         this.playType = playType;
+        if (!this.isValid()) {
+            throw new IllegalStateException();
+        }
     }
 
     /**

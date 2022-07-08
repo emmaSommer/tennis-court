@@ -31,10 +31,10 @@ public class Court extends SystemEntity {
      * @param type of the court
      */
     public Court(CourtType type) {
-        if (type == null) {
-            throw new NullArgumentException(ENTITY_NAME, "court type = null");
-        }
         this.type = type;
+        if (!this.isValid()) {
+            throw new IllegalStateException();
+        }
     }
 
     /**
@@ -63,6 +63,7 @@ public class Court extends SystemEntity {
     }
 
     public void setType(CourtType type) {
+
         this.type = type;
     }
 
