@@ -92,7 +92,7 @@ public class RequestController {
 
         Client client = null;
         if (clients.isEmpty()) {
-            client = new Client(payload.getClientName(), payload.getPhoneNumber());
+            client = clientController.addEntity(payload.getClientName(), payload.getPhoneNumber()).getContent();
         } else {
             client = clients.get(0);
         }

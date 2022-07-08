@@ -59,9 +59,4 @@ public class ReservationController extends EntityController<Reservation> {
         Reservation reservation = new Reservation(start, end, court, client, playType);
         return super.addEntity(reservation);
     }
-
-    @Override
-    public EntityModel<Reservation> updateEntity(Long id, Reservation newEntity) {
-        return super.updateEntity(id, newEntity);
-    }
 }

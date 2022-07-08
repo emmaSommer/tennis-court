@@ -77,8 +77,8 @@ public class DataLoader {
 
     List<Client> getUsers() {
         List<Client> users = new ArrayList<>();
-        users.add(new Client("Bilbo Baggins", "420"));
-        users.add(new Client("Saruman", "421"));
+        users.add(new Client("Bilbo Baggins", "420903030030"));
+        users.add(new Client("Saruman", "421901131131"));
         return users;
     }
 }

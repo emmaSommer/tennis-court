@@ -1,6 +1,5 @@
 package tenniscourts.controllers;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -53,7 +52,7 @@ public class ClientController extends EntityController<Client> {
      *
      * @param name        of the Client
      * @param phoneNumber of the Client
-     * @return REST model of the new Client instatnce
+     * @return REST model of the new Client instance
      */
     public EntityModel<Client> addEntity(String name, String phoneNumber) {
         // todo check if number is valid

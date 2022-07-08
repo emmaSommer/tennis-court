@@ -1,7 +1,9 @@
 package tenniscourts.entities;
 
+import antlr.StringUtils.*;
 import tenniscourts.controllers.ClientController;
 
+import java.util.regex.Pattern;
 import javax.persistence.*;
 
 /**
@@ -23,6 +25,11 @@ public class Client extends SystemEntity {
     @Column(unique = true)
     private String phone_number;
 
+    public static boolean validNumber(String phone_number) {
+        return phone_number.length() == 12 &&
+                Pattern.compile("^[0-9]+$").matcher(phone_number).matches();
+    }
+
 
     /**
      * Constructor
@@ -31,14 +38,14 @@ public class Client extends SystemEntity {
      * @param phone_number of the client
      */
     public Client(String name, String phone_number) {
-        // todo check phone number validity
-
         if (name == null || phone_number == null) {
             throw new NullArgumentException(
                     ENTITY_NAME,
                     "name = " + name + ", phone number: " + phone_number);
         }
-
+        if (!validNumber(phone_number)) {
+            throw new IllegalArgumentException("Phone number: " + phone_number + " has wrong fromat");
+        }
         this.name = name;
         this.phone_number = phone_number;
     }
@@ -97,4 +104,5 @@ public class Client extends SystemEntity {
                 ", phone_number='" + phone_number + '\'' +
                 '}';
     }
+
 }
