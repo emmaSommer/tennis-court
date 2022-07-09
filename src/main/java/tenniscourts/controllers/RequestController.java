@@ -64,8 +64,9 @@ public class RequestController {
     @GetMapping("/" + ReservationController.ROOT_NAME + "/phone_number={phoneNumber}")
     // todo - finish this method
     public CollectionModel<EntityModel<Reservation>> getReservations(@PathVariable String phoneNumber) {
-        CollectionModel<EntityModel<Reservation>> model =
-                SystemEntity.toCollectionModel(reservationController.getRepository().findAll(), reservationController);
+        Client client = clientController.getByPhoneNumber(phoneNumber);
+        CollectionModel<EntityModel<Reservation>> model = SystemEntity.toCollectionModel(
+                reservationController.getRepository().findAllByClient_Id(client.getId()), reservationController);
         return model.add(
                 linkTo(methodOn(RequestController.class).getReservations(phoneNumber)).withSelfRel(),
                 linkTo(methodOn(ReservationController.class).getAll()).withRel(ReservationController.ROOT_NAME));

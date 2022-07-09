@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 import tenniscourts.entities.Client;
 import tenniscourts.storage.ClientRepository;
 
+import java.util.List;
+
 /**
  * Controller for the Client class
  *
@@ -50,6 +52,20 @@ public class ClientController extends EntityController<Client> {
     @Override
     public CollectionModel<EntityModel<Client>> getAll() {
         return super.getAll();
+    }
+
+    public Client getByPhoneNumber(String phoneNumber) {
+        if (!Client.validNumber(phoneNumber)) {
+            throw new IllegalArgumentException("Can not find client with invalid number: " + phoneNumber);
+        }
+        List<Client> clients = repository.findByPhoneNumber(phoneNumber);
+        if (clients.isEmpty()) {
+            throw new EntityNotFoundException("Client with number: " + phoneNumber + " is not in repository");
+        }
+        if (clients.size() > 1) {
+            throw new IllegalStateException("Duplicate number in database: " + phoneNumber);
+        }
+        return clients.get(0);
     }
 
 
