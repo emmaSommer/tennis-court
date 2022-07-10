@@ -28,7 +28,7 @@ public abstract class SystemEntity {
         return EntityModel.of(
                 entity,
                 linkTo(methodOn(controller.getClass()).getEntityModel(entity.getId())).withSelfRel(),
-                linkTo(methodOn(controller.getClass()).getAll()).withRel(entity.getRootName())
+                linkTo(methodOn(controller.getClass()).getCollectionModel()).withRel(entity.getRootName())
         );
     }
 

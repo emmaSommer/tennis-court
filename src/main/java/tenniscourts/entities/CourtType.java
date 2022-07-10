@@ -1,5 +1,6 @@
 package tenniscourts.entities;
 
+import com.sun.istack.NotNull;
 import tenniscourts.controllers.CourtTypeController;
 
 import javax.persistence.Entity;
@@ -22,7 +23,9 @@ public class CourtType extends SystemEntity {
     @Id
     @GeneratedValue
     private Long id;
+    @NotNull
     private String name;
+    @NotNull
     private BigDecimal price;
 
 
@@ -30,7 +33,7 @@ public class CourtType extends SystemEntity {
      * Constructor
      *
      * @param name  of the court type
-     * @param price per one hour
+     * @param price per one minute
      */
     public CourtType(String name, BigDecimal price) {
 
@@ -68,10 +71,16 @@ public class CourtType extends SystemEntity {
     }
 
     public void setName(String name) {
+        if (name == null){
+            throw new IllegalArgumentException();
+        }
         this.name = name;
     }
 
     public void setPrice(BigDecimal price) {
+        if (price == null){
+            throw new IllegalArgumentException();
+        }
         this.price = price;
     }
 

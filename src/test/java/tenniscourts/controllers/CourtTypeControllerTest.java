@@ -5,10 +5,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.event.annotation.BeforeTestExecution;
 import tenniscourts.entities.CourtType;
 import tenniscourts.entities.CourtTypeTest;
-import tenniscourts.storage.CourtTypeRepository;
 
 import java.math.BigDecimal;
 
@@ -46,7 +44,7 @@ class CourtTypeControllerTest {
 
     @Test
     void getAll() {
-        assertEquals(4, controller.getAll().getContent().size());
+        assertEquals(4, controller.getCollectionModel().getContent().size());
     }
 
     @Test

@@ -28,12 +28,6 @@ class DataLoaderTest {
 
     @Test
     void loadData() {
-        DataLoader loader = new DataLoader();
-       // loader.loadData(courtController.getRepository(),
-       //         courtTypeController.getRepository(),
-       //         clientController.getRepository(),
-       //         reservationController.getRepository());
-
         assertThat(courtController.getRepository().count()).isEqualTo(3);
         assertThat(courtTypeController.getRepository().count()).isEqualTo(3);
         assertThat(clientController.getRepository().count()).isEqualTo(2);

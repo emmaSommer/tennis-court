@@ -1,5 +1,6 @@
 package tenniscourts.entities;
 
+import com.sun.istack.NotNull;
 import tenniscourts.controllers.CourtController;
 
 import javax.persistence.*;
@@ -21,6 +22,7 @@ public class Court extends SystemEntity {
     private Long id;
 
     @ManyToOne
+    @NotNull
     private CourtType type;
 
 
@@ -59,7 +61,9 @@ public class Court extends SystemEntity {
     }
 
     public void setType(CourtType type) {
-
+        if (type == null){
+            throw new IllegalArgumentException();
+        }
         this.type = type;
     }
 

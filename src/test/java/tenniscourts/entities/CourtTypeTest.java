@@ -18,14 +18,14 @@ public class CourtTypeTest {
     void isValid() {
         assertTrue(VALID_COURT_TYPE.isValid());
         CourtType type = new CourtType(null, null);
-        assertFalse(VALID_COURT_TYPE.isValid());
+        assertFalse(type.isValid());
         type.setName("");
-        assertFalse(VALID_COURT_TYPE.isValid());
+        assertFalse(type.isValid());
         type.setName("name");
-        assertFalse(VALID_COURT_TYPE.isValid());
+        assertFalse(type.isValid());
         type.setName(null);
         type.setPrice(BigDecimal.ZERO);
-        assertFalse(VALID_COURT_TYPE.isValid());
+        assertFalse(type.isValid());
 
     }
 

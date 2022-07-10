@@ -79,9 +79,9 @@ public class DataLoader {
 
     private static List<CourtType> getCourtTypes() {
         List<CourtType> courtTypes = new ArrayList<>();
-        courtTypes.add(new CourtType("grass", new BigDecimal(100)));
-        courtTypes.add(new CourtType("clay", new BigDecimal(90)));
-        courtTypes.add(new CourtType("hard", new BigDecimal(80)));
+        courtTypes.add(new CourtType("grass", new BigDecimal(10)));
+        courtTypes.add(new CourtType("clay", new BigDecimal(9)));
+        courtTypes.add(new CourtType("hard", new BigDecimal(8)));
         return courtTypes;
     }
 

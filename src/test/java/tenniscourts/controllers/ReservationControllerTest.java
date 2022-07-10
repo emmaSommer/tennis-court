@@ -5,8 +5,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.hateoas.EntityModel;
 import tenniscourts.entities.*;
-import tenniscourts.storage.ReservationRepository;
 
 import java.time.LocalDateTime;
 
@@ -39,9 +39,9 @@ class ReservationControllerTest {
 
     @BeforeEach
     public void setUp() {
-        client = clientController.addEntity(ClientTest.VALID_CLIENT).getContent();
-        courtType = courtTypeController.addEntity(CourtTypeTest.VALID_COURT_TYPE).getContent();
-        court = courtController.addEntity(new Court(courtType)).getContent();
+        client = clientController.getRepository().save(ClientTest.VALID_CLIENT);
+        courtType = courtTypeController.getRepository().save(CourtTypeTest.VALID_COURT_TYPE);
+        court = courtController.getRepository().save(new Court(courtType));
         reservation = controller.getRepository().save(new Reservation(
                 time,
                 time.plusHours(1),
@@ -63,15 +63,18 @@ class ReservationControllerTest {
 
     @Test
     void getEntityModel() {
-        assertEquals(reservation, controller.getEntityModel(reservation.getId()).getContent());
+        EntityModel<Reservation> model = controller.getEntityModel(reservation.getId());
+        assertEquals(reservation, model.getContent());
+
 
         assertThrows(EntityNotFoundException.class, () ->
                 controller.getEntityModel((long) -1));
+        controller.getEntityModel(null);
     }
 
     @Test
     void getAll() {
-        assertEquals(7, controller.getAll().getContent().size());
+        assertEquals(7, controller.getCollectionModel().getContent().size());
     }
 
     @Test

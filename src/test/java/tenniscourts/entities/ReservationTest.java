@@ -3,6 +3,7 @@ package tenniscourts.entities;
 import org.junit.jupiter.api.Test;
 import tenniscourts.controllers.ReservationController;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -74,7 +75,21 @@ public class ReservationTest {
 
     @Test
     void getPrice() {
-        // todo
+        assertEquals(BigDecimal.ZERO, VALID_RESERVATION.getPrice());
+
+        Court court = new Court(new CourtType("new type", BigDecimal.TEN));
+        Reservation reservation = new Reservation();
+        reservation.cloneAttributes(VALID_RESERVATION);
+
+        reservation.setCourt(court);
+        assertEquals(new BigDecimal(600), reservation.getPrice());
+
+        reservation.setEndDateTime(reservation.getEndDateTime().plusMinutes(66));
+        assertEquals(new BigDecimal(1260), reservation.getPrice());
+
+        reservation.setEndDateTime(reservation.getStartDateTime().minusHours(1));
+        assertThrows(IllegalStateException.class, reservation::getPrice);
+
     }
 
     @Test
@@ -90,5 +105,39 @@ public class ReservationTest {
 
         assertThrows(IllegalArgumentException.class, () ->
                 duplicate.cloneAttributes(CourtTest.VALID_COURT));
+    }
+
+    @Test
+    void checkOverlap() {
+        Reservation reservation = VALID_RESERVATION;
+
+        assertTrue(reservation.checkOverlap(
+                reservation.getStartDateTime().plusDays(1),
+                reservation.getEndDateTime().plusDays(1)));
+
+        assertTrue(reservation.checkOverlap(
+                reservation.getStartDateTime().minusDays(1),
+                reservation.getEndDateTime().minusDays(1)
+        ));
+
+        assertFalse(reservation.checkOverlap(
+                reservation.getStartDateTime(),
+                reservation.getEndDateTime()
+        ));
+
+        assertFalse(reservation.checkOverlap(
+                reservation.getStartDateTime().minusMinutes(30),
+                reservation.getEndDateTime()
+        ));
+
+        assertFalse(reservation.checkOverlap(
+                reservation.getStartDateTime(),
+                reservation.getEndDateTime().plusMinutes(30)
+        ));
+
+        assertFalse(reservation.checkOverlap(
+                reservation.getStartDateTime().minusMinutes(30),
+                reservation.getEndDateTime().plusMinutes(30)
+        ));
     }
 }

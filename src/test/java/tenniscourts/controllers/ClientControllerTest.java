@@ -6,8 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import tenniscourts.entities.*;
-import tenniscourts.storage.ClientRepository;
-import tenniscourts.storage.ReservationRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -59,7 +57,7 @@ class ClientControllerTest {
 
     @Test
     void getAll() {
-        assertEquals(3, controller.getAll().getContent().size());
+        assertEquals(3, controller.getCollectionModel().getContent().size());
     }
 
     @Test

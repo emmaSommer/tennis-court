@@ -1,5 +1,6 @@
 package tenniscourts.entities;
 
+import com.sun.istack.NotNull;
 import tenniscourts.controllers.ClientController;
 
 import java.util.Objects;
@@ -20,8 +21,10 @@ public class Client extends SystemEntity {
     @Id
     @GeneratedValue
     private Long id;
+    @NotNull
     private String name;
     @Column(unique = true)
+    @NotNull
     private String phoneNumber;
 
     public static boolean validNumber(String phone_number) {
@@ -72,10 +75,16 @@ public class Client extends SystemEntity {
     }
 
     public void setName(String name) {
+        if (name == null){
+            throw new IllegalArgumentException();
+        }
         this.name = name;
     }
 
     public void setPhoneNumber(String phoneNumber) {
+        if (phoneNumber == null){
+            throw new IllegalArgumentException();
+        }
         this.phoneNumber = phoneNumber;
     }
 
