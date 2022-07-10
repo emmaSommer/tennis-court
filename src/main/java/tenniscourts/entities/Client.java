@@ -2,6 +2,7 @@ package tenniscourts.entities;
 
 import tenniscourts.controllers.ClientController;
 
+import java.util.Objects;
 import java.util.regex.Pattern;
 import javax.persistence.*;
 
@@ -24,7 +25,7 @@ public class Client extends SystemEntity {
     private String phoneNumber;
 
     public static boolean validNumber(String phone_number) {
-        return phone_number.length() == 12 &&
+        return phone_number != null && phone_number.length() == 12 &&
                 Pattern.compile("^[0-9]+$").matcher(phone_number).matches();
     }
 
@@ -38,17 +39,12 @@ public class Client extends SystemEntity {
     public Client(String name, String phone_number) {
         this.name = name;
         this.phoneNumber = phone_number;
-        if (!this.isValid()){
-            throw new IllegalStateException();
-        }
     }
 
     /**
      * Default constructor
      */
     public Client() {
-        this.name = "default user";
-        this.phoneNumber = "";
     }
 
     @Override
@@ -103,4 +99,18 @@ public class Client extends SystemEntity {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Client client = (Client) o;
+        return Objects.equals(id, client.id)
+                && Objects.equals(name, client.name)
+                && Objects.equals(phoneNumber, client.phoneNumber);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, phoneNumber);
+    }
 }

@@ -49,14 +49,8 @@ public abstract class EntityController<T extends SystemEntity> {
      * entities in the repository
      */
     public CollectionModel<EntityModel<T>> getAll() {
-        List<EntityModel<T>> entities = this.getRepository().findAll()
-                .stream()
-                .map(entity -> SystemEntity.toModel(entity, this))
-                .collect(Collectors.toList());
-        return CollectionModel.of(
-                entities,
-                linkTo(methodOn(this.getClass()).getAll()).withSelfRel()
-        );
+        return SystemEntity.toCollectionModel(
+                this.getRepository().findAll(), this);
     }
 
     /**
@@ -68,7 +62,7 @@ public abstract class EntityController<T extends SystemEntity> {
             // todo add error message
             throw new IllegalArgumentException();
         }
-        getRepository().save(entity);
+        entity = getRepository().save(entity);
         return SystemEntity.toModel(entity, this);
     }
 
@@ -91,7 +85,7 @@ public abstract class EntityController<T extends SystemEntity> {
      * @return REST model of the updated entity
      */
     public EntityModel<T> updateEntity(Long id, T newEntity) {
-        if (newEntity == null || !newEntity.isValid()){
+        if (newEntity == null || !newEntity.isValid()) {
             // todo
             throw new IllegalArgumentException();
         }
@@ -100,7 +94,7 @@ public abstract class EntityController<T extends SystemEntity> {
             entity.cloneAttributes(newEntity);
             return addEntity(entity);
 
-        } catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             throw new EntityNotFoundException("Attempting to update entity not found in repository");
         }
     }

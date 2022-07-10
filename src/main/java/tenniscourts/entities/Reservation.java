@@ -9,6 +9,7 @@ import javax.persistence.ManyToOne;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  * Class for representing individual reservation
@@ -33,10 +34,11 @@ public class Reservation extends SystemEntity {
     private Client client;
     private PlayType playType = PlayType.SINGLES_PLAY;
 
+
     public static boolean validInterval(LocalDateTime start, LocalDateTime end) {
         return start != null && end != null && end.isAfter(start);
         // todo - debug this condition
-                // Duration.between(start, end).toMinutes() < MAX_INTERVAL;
+        //&& Duration.between(start, end).toMinutes() < MAX_INTERVAL;
     }
 
 
@@ -55,9 +57,6 @@ public class Reservation extends SystemEntity {
         this.court = court;
         this.client = client;
         this.playType = playType;
-        if (!this.isValid()) {
-            throw new IllegalStateException();
-        }
     }
 
     /**
@@ -158,5 +157,23 @@ public class Reservation extends SystemEntity {
                 ", client=" + client +
                 ", playType=" + playType +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Reservation that = (Reservation) o;
+        return Objects.equals(id, that.id)
+                && Objects.equals(startDateTime, that.startDateTime)
+                && Objects.equals(endDateTime, that.endDateTime)
+                && Objects.equals(court, that.court)
+                && Objects.equals(client, that.client)
+                && playType == that.playType;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, startDateTime, endDateTime, court, client, playType);
     }
 }

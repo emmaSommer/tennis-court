@@ -2,10 +2,8 @@ package tenniscourts.entities;
 
 import tenniscourts.controllers.CourtController;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
+import java.util.Objects;
 
 /**
  * Class for representing individual courts
@@ -21,6 +19,7 @@ public class Court extends SystemEntity {
     @Id
     @GeneratedValue
     private Long id;
+
     @ManyToOne
     private CourtType type;
 
@@ -32,16 +31,13 @@ public class Court extends SystemEntity {
      */
     public Court(CourtType type) {
         this.type = type;
-        if (!this.isValid()) {
-            throw new IllegalStateException();
-        }
     }
 
     /**
      * Default constructor
      */
     public Court() {
-        this.type = new CourtType();
+
     }
 
     @Override
@@ -86,5 +82,18 @@ public class Court extends SystemEntity {
                 "id=" + id +
                 ", type=" + type +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Court court = (Court) o;
+        return Objects.equals(id, court.id) && Objects.equals(type, court.type);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, type);
     }
 }

@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.math.BigDecimal;
+import java.util.Objects;
 
 /**
  * Class for representing specific types of courts
@@ -35,17 +36,12 @@ public class CourtType extends SystemEntity {
 
         this.name = name;
         this.price = price;
-        if (!this.isValid()) {
-            throw new IllegalStateException();
-        }
     }
 
     /**
      * Default constructor
      */
     public CourtType() {
-        this.name = "default";
-        this.price = BigDecimal.ZERO;
     }
 
     @Override
@@ -96,5 +92,20 @@ public class CourtType extends SystemEntity {
                 ", name='" + name + '\'' +
                 ", price=" + price +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CourtType courtType = (CourtType) o;
+        return Objects.equals(id, courtType.id)
+                && Objects.equals(name, courtType.name)
+                && price.compareTo(courtType.price) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, price);
     }
 }
