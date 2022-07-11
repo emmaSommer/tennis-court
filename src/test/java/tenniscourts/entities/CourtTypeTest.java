@@ -28,11 +28,6 @@ public class CourtTypeTest {
     }
 
     @Test
-    void getRootName() {
-        assertEquals(VALID_COURT_TYPE.getRootName(), CourtTypeController.ROOT_NAME);
-    }
-
-    @Test
     void cloneAttributes() {
         CourtType duplicate = new CourtType();
         duplicate.cloneAttributes(VALID_COURT_TYPE);

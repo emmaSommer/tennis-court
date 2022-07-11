@@ -57,10 +57,9 @@ public class ReservationController extends EntityController<Reservation> {
      * @throws EntityNotFoundException when client has no reservations
      */
     public List<Reservation> getWithClientId(Long clientId) {
-
         List<Reservation> reservations = repository.findAllByClient_Id(clientId);
         if (reservations.isEmpty()) {
-            throw new EntityNotFoundException("reservations for client: " + clientId);
+            throw new EntityNotFoundException("reservations for client with id: " + clientId);
         }
         return reservations;
     }
@@ -73,7 +72,7 @@ public class ReservationController extends EntityController<Reservation> {
     public List<Reservation> getWithCourtId(Long courtId) {
         List<Reservation> reservations = repository.findAllByCourt_Id(courtId);
         if (reservations.isEmpty()) {
-            throw new EntityNotFoundException("reservations for client: " + courtId);
+            throw new EntityNotFoundException("reservations for client with id: " + courtId);
         }
         return reservations;
     }
@@ -91,11 +90,19 @@ public class ReservationController extends EntityController<Reservation> {
                                  Court court, PlayType playType,
                                  Client client) {
 
-        if (!isAvailable(start, end, court)) {
+        if (findReservationOverlap(start, end, court)) {
             throw new InvalidEntityException("Court is already booked for this time interval");
         }
         Reservation reservation = new Reservation(start, end, court, client, playType);
         return super.addEntity(reservation);
+    }
+
+    @Override
+    public Reservation addEntity(Reservation entity) {
+        if (findReservationOverlap(entity.getStartDateTime(), entity.getEndDateTime(), entity.getCourt())) {
+            throw new InvalidEntityException("Court is already booked for this time interval");
+        }
+        return super.addEntity(entity);
     }
 
     /**
@@ -104,14 +111,14 @@ public class ReservationController extends EntityController<Reservation> {
      * @param court of new reservation
      * @return true when there are no conflicting reservations
      */
-    public boolean isAvailable(LocalDateTime start, LocalDateTime end, Court court) {
+    public boolean findReservationOverlap(LocalDateTime start, LocalDateTime end, Court court) {
         List<Reservation> reservations = repository.findAllByCourt_Id(court.getId());
         for (Reservation reservation : reservations
         ) {
-            if (!reservation.checkOverlap(start, end)) {
-                return false;
+            if (!reservation.withoutOverlap(start, end)) {
+                return true;
             }
         }
-        return true;
+        return false;
     }
 }

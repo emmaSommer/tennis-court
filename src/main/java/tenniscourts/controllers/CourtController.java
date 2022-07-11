@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import tenniscourts.entities.CourtType;
 import tenniscourts.entities.Court;
+import tenniscourts.entities.Reservation;
 import tenniscourts.exceptions.EntityNotFoundException;
 import tenniscourts.exceptions.InvalidDeleteException;
 import tenniscourts.storage.CourtRepository;
@@ -58,7 +59,7 @@ public class CourtController extends EntityController<Court> {
     public List<Court> getWithCourtType(Long id) {
         List<Court> courts = repository.findAllByCourtType_Id(id);
         if (courts.isEmpty()) {
-            throw new EntityNotFoundException("Can't find courts with courtType id: " + id);
+            throw new EntityNotFoundException(getRootName() + " with court type id: " + id);
         }
         return courts;
     }
@@ -75,8 +76,8 @@ public class CourtController extends EntityController<Court> {
     @Override
     public Court deleteEntity(Long id) {
         try {
-            reservationController.getWithCourtId(id);
-            throw new InvalidDeleteException("Deleting courts with existing reservations");
+            List<Reservation> r = reservationController.getWithCourtId(id);
+            throw new InvalidDeleteException("Deleting courts with existing reservations\n\t" + r);
 
         } catch (EntityNotFoundException e) {
             return super.deleteEntity(id);

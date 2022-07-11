@@ -37,11 +37,11 @@ public abstract class SystemEntity {
         return EntityModel.of(
                 entity,
                 linkTo(methodOn(controller.getClass()).getEntityModel(entity.getId())).withSelfRel(),
-                linkTo(methodOn(controller.getClass()).getCollectionModel()).withRel(entity.getRootName())
+                linkTo(methodOn(controller.getClass()).getCollectionModel()).withRel(controller.getRootName())
         );
     }
 
-    public static <S extends SystemEntity> CollectionModel<EntityModel<S>> toCollectionModel(List<S> entities, EntityController<S> controller){
+    public static <S extends SystemEntity> CollectionModel<EntityModel<S>> toCollectionModel(List<S> entities, EntityController<S> controller) {
         return CollectionModel.of(
                 entities.stream()
                         .map(entity -> SystemEntity.toModel(entity, controller))
@@ -53,21 +53,16 @@ public abstract class SystemEntity {
     /**
      * @return unique identification of the entity
      */
-    public Long getId(){
+    public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
-        if (id != null){
+        if (id != null) {
             throw new IllegalArgumentException("Id can't be set");
         }
         this.id = id;
     }
-
-    /**
-     * @return name under which are entities aggregated
-     */
-    public abstract String getRootName();
 
     /**
      * Changes attributes with the values from newEntity

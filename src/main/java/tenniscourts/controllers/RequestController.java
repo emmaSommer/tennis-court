@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import tenniscourts.entities.*;
 import tenniscourts.exceptions.EntityNotFoundException;
 import tenniscourts.exceptions.InvalidEntityException;
+import tenniscourts.exceptions.InvalidRequestException;
 
 import java.math.BigDecimal;
 
@@ -82,23 +83,40 @@ public class RequestController {
     @PutMapping("/" + ReservationController.ROOT_NAME)
     public BigDecimal newReservation(@RequestBody ReservationPayload payload) {
         try {
+            Client client = processClient(payload.getClientName(), payload.getPhoneNumber());
             Court court = courtController.getEntity(payload.getCourtId());
-            Client client = clientController.getByPhoneNumber(payload.getPhoneNumber());
-
-            if (!client.getName().equals(payload.getClientName())) {
-                throw new InvalidEntityException("Phone number is associated with different name");
-            }
-
             Reservation reservation = new Reservation(
                     payload.getStart(), payload.getEnd(),
                     court, client, payload.getPlayType()
             );
+
             reservation = reservationController.addEntity(reservation);
             return reservation.getPrice();
 
         } catch (EntityNotFoundException | InvalidEntityException e) {
-            throw new IllegalArgumentException("Can't create reservation\n\t" + e.getMessage());
+            throw new InvalidRequestException("Can't create reservation\n\t" + e.getMessage());
         }
+    }
 
+    /**
+     * Retrieves client from repository or creates a new record
+     *
+     * @param name   of the client
+     * @param number of the client
+     * @return Client instance with the given name and number saved in the repository
+     * @throws InvalidEntityException when the number exists under different name
+     */
+    private Client processClient(String name, String number) {
+        try {
+            Client client = clientController.getByPhoneNumber(number);
+            if (!client.getName().equals(name)) {
+                throw new InvalidEntityException("Phone number is associated with different name");
+            }
+            return client;
+
+        } catch (EntityNotFoundException e) {
+            return clientController.addEntity(name, number);
+
+        }
     }
 }

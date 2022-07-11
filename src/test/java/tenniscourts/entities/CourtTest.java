@@ -30,11 +30,6 @@ public class CourtTest {
     }
 
     @Test
-    void getRootName() {
-        assertEquals(court.getRootName(), CourtController.ROOT_NAME);
-    }
-
-    @Test
     void cloneAttributes() {
         CourtType duplicateType = new CourtType("type", BigDecimal.ZERO);
         Court duplicate = new Court(duplicateType);

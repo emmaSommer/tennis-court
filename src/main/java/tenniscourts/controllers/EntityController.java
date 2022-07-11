@@ -50,7 +50,7 @@ public abstract class EntityController<T extends SystemEntity> {
             return getRepository().findById(id)
                     .orElseThrow(() -> new EntityNotFoundException(getEntityName(), id, "retrieving from repository"));
         } catch (InvalidDataAccessApiUsageException e) {
-            throw new InvalidIdException("Accessing entity with null id\n" + e.getMessage());
+            throw new InvalidIdException("Accessing entity with invalid id\n" + e.getMessage());
         }
 
 
@@ -101,7 +101,7 @@ public abstract class EntityController<T extends SystemEntity> {
             getRepository().deleteById(id);
             entity.setId(null);
             return entity;
-        } catch (EntityNotFoundException | InvalidIdException e ){
+        } catch (EntityNotFoundException | InvalidIdException e) {
             throw new InvalidDeleteException(id, getRootName());
         }
 

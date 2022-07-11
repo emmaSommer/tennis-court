@@ -30,9 +30,6 @@ public class ReservationPayload {
         this.playType = playType;
     }
 
-    public ReservationPayload() {
-    }
-
     public LocalDateTime getStart() {
         return start;
     }

@@ -1,7 +1,6 @@
 package tenniscourts.entities;
 
 import org.junit.jupiter.api.Test;
-import tenniscourts.controllers.ReservationController;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -52,11 +51,6 @@ public class ReservationTest {
     }
 
     @Test
-    void getRootName() {
-        assertEquals(VALID_RESERVATION.getRootName(), ReservationController.ROOT_NAME);
-    }
-
-    @Test
     void getPrice() {
         assertEquals(BigDecimal.ZERO, VALID_RESERVATION.getPrice());
 
@@ -94,31 +88,31 @@ public class ReservationTest {
     void checkOverlap() {
         Reservation reservation = VALID_RESERVATION;
 
-        assertTrue(reservation.checkOverlap(
+        assertTrue(reservation.withoutOverlap(
                 reservation.getStartDateTime().plusDays(1),
                 reservation.getEndDateTime().plusDays(1)));
 
-        assertTrue(reservation.checkOverlap(
+        assertTrue(reservation.withoutOverlap(
                 reservation.getStartDateTime().minusDays(1),
                 reservation.getEndDateTime().minusDays(1)
         ));
 
-        assertFalse(reservation.checkOverlap(
+        assertFalse(reservation.withoutOverlap(
                 reservation.getStartDateTime(),
                 reservation.getEndDateTime()
         ));
 
-        assertFalse(reservation.checkOverlap(
+        assertFalse(reservation.withoutOverlap(
                 reservation.getStartDateTime().minusMinutes(30),
                 reservation.getEndDateTime()
         ));
 
-        assertFalse(reservation.checkOverlap(
+        assertFalse(reservation.withoutOverlap(
                 reservation.getStartDateTime(),
                 reservation.getEndDateTime().plusMinutes(30)
         ));
 
-        assertFalse(reservation.checkOverlap(
+        assertFalse(reservation.withoutOverlap(
                 reservation.getStartDateTime().minusMinutes(30),
                 reservation.getEndDateTime().plusMinutes(30)
         ));

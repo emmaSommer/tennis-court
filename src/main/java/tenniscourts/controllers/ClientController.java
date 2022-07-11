@@ -2,6 +2,7 @@ package tenniscourts.controllers;
 
 import org.springframework.web.bind.annotation.RestController;
 import tenniscourts.entities.Client;
+import tenniscourts.entities.Reservation;
 import tenniscourts.exceptions.EntityNotFoundException;
 import tenniscourts.exceptions.InvalidDeleteException;
 import tenniscourts.storage.ClientRepository;
@@ -81,8 +82,8 @@ public class ClientController extends EntityController<Client> {
     @Override
     public Client deleteEntity(Long id) {
         try {
-            reservationController.getWithClientId(id);
-            throw new InvalidDeleteException("Deleting client with existing reservation");
+            List<Reservation> r = reservationController.getWithClientId(id);
+            throw new InvalidDeleteException("Deleting client with existing reservations:\n\t" + r);
 
         } catch (EntityNotFoundException e) {
             return super.deleteEntity(id);

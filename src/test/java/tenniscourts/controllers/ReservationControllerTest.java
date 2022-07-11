@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.hateoas.EntityModel;
 import tenniscourts.entities.*;
 import tenniscourts.exceptions.EntityNotFoundException;
+import tenniscourts.exceptions.InvalidEntityException;
 import tenniscourts.exceptions.InvalidIdException;
 
 import java.time.LocalDateTime;
@@ -82,11 +83,12 @@ class ReservationControllerTest {
 
     @Test
     void addEntity() {
-        Reservation newReservation = controller.getRepository().save(new Reservation(
+        Reservation newReservation = new Reservation(
                 time.plusHours(30),
                 time.plusHours(33),
-                court, client, PlayType.SINGLES_PLAY));
+                court, client, PlayType.SINGLES_PLAY);
         newReservation = controller.addEntity(newReservation);
+        assertThrows(InvalidEntityException.class, () -> controller.addEntity(reservation));
         assertEquals(5, controller.getRepository().count());
         assertThat(newReservation).isNotNull();
         assertEquals(newReservation, controller.getEntity(newReservation.getId()));

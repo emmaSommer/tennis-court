@@ -19,28 +19,35 @@ public class ControllerExceptionHandler {
     @ResponseBody
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(EntityNotFoundException.class)
-    public String entityNotFoundAdvice(EntityNotFoundException e) {
+    public String entityNotFoundMessage(EntityNotFoundException e) {
         return e.getMessage();
     }
 
     @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(InvalidIdException.class)
-    public String nullIdAdvice(InvalidIdException e) {
+    public String invalidIdMessage(InvalidIdException e) {
         return e.getMessage();
     }
 
     @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(InvalidEntityException.class)
-    public String invalidEntity(InvalidIdException e) {
+    public String invalidEntityMessage(InvalidIdException e) {
         return e.getMessage();
     }
 
     @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(InvalidDeleteException.class)
-    public String invalidDelete(InvalidDeleteException e) {
+    public String invalidDeleteMessage(InvalidDeleteException e) {
+        return e.getMessage();
+    }
+
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(InvalidRequestException.class)
+    public String invalidRequestMessage(InvalidRequestException e) {
         return e.getMessage();
     }
 }

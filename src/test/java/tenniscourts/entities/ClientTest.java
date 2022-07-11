@@ -42,11 +42,6 @@ public class ClientTest {
     }
 
     @Test
-    void getRootName() {
-        assertEquals(ClientController.ROOT_NAME, VALID_CLIENT.getRootName());
-    }
-
-    @Test
     void cloneAttributes() {
         Client duplicate = new Client("Henry", "123456789987");
         duplicate.cloneAttributes(VALID_CLIENT);

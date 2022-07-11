@@ -29,7 +29,6 @@ public class Client extends SystemEntity {
                 Pattern.compile("^[0-9]+$").matcher(phone_number).matches();
     }
 
-
     /**
      * Constructor
      *
@@ -61,20 +60,15 @@ public class Client extends SystemEntity {
         return phoneNumber;
     }
 
-    @Override
-    public String getRootName() {
-        return ClientController.ROOT_NAME;
-    }
-
     public void setName(String name) {
-        if (name == null){
+        if (name == null) {
             throw new IllegalArgumentException();
         }
         this.name = name;
     }
 
     public void setPhoneNumber(String phoneNumber) {
-        if (phoneNumber == null){
+        if (phoneNumber == null) {
             throw new IllegalArgumentException();
         }
         this.phoneNumber = phoneNumber;
@@ -102,11 +96,11 @@ public class Client extends SystemEntity {
 
     @Override
     public boolean equals(Object o) {
-        if (!super.equals(o)){
+        if (!super.equals(o)) {
             return false;
         }
         Client client = (Client) o;
-        return  Objects.equals(name, client.name)
+        return Objects.equals(name, client.name)
                 && Objects.equals(phoneNumber, client.phoneNumber);
     }
 

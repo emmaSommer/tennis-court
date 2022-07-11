@@ -4,8 +4,6 @@ import com.sun.istack.NotNull;
 import tenniscourts.controllers.CourtTypeController;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import java.math.BigDecimal;
 import java.util.Objects;
 
@@ -58,20 +56,15 @@ public class CourtType extends SystemEntity {
         return price;
     }
 
-    @Override
-    public String getRootName() {
-        return CourtTypeController.ROOT_NAME;
-    }
-
     public void setName(String name) {
-        if (name == null){
+        if (name == null) {
             throw new IllegalArgumentException();
         }
         this.name = name;
     }
 
     public void setPrice(BigDecimal price) {
-        if (price == null){
+        if (price == null) {
             throw new IllegalArgumentException();
         }
         this.price = price;
@@ -98,7 +91,7 @@ public class CourtType extends SystemEntity {
 
     @Override
     public boolean equals(Object o) {
-        if (!super.equals(o)){
+        if (!super.equals(o)) {
             return false;
         }
         CourtType courtType = (CourtType) o;

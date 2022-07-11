@@ -47,13 +47,8 @@ public class Court extends SystemEntity {
         return courtType;
     }
 
-    @Override
-    public String getRootName() {
-        return CourtController.ROOT_NAME;
-    }
-
     public void setCourtType(CourtType courtType) {
-        if (courtType == null){
+        if (courtType == null) {
             throw new IllegalArgumentException();
         }
         this.courtType = courtType;
@@ -82,11 +77,11 @@ public class Court extends SystemEntity {
 
     @Override
     public boolean equals(Object o) {
-        if (!super.equals(o)){
+        if (!super.equals(o)) {
             return false;
         }
         Court court = (Court) o;
-        return  Objects.equals(courtType, court.courtType);
+        return Objects.equals(courtType, court.courtType);
     }
 
     @Override

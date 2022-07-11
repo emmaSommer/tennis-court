@@ -1,12 +1,14 @@
 package tenniscourts.controllers;
 
 import org.springframework.web.bind.annotation.RestController;
+import tenniscourts.entities.Court;
 import tenniscourts.entities.CourtType;
 import tenniscourts.exceptions.EntityNotFoundException;
 import tenniscourts.exceptions.InvalidDeleteException;
 import tenniscourts.storage.CourtTypeRepository;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * Entity controller for CourtType class
@@ -61,8 +63,8 @@ public class CourtTypeController extends EntityController<CourtType> {
     @Override
     public CourtType deleteEntity(Long id) {
         try {
-            courtController.getWithCourtType(id);
-            throw new InvalidDeleteException("Deleting court type with existing courts");
+            List<Court> courts = courtController.getWithCourtType(id);
+            throw new InvalidDeleteException("Deleting court type with existing courts\n\t" + courts);
         } catch (EntityNotFoundException e) {
             return super.deleteEntity(id);
         }

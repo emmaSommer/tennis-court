@@ -1,11 +1,8 @@
 package tenniscourts.entities;
 
 import com.sun.istack.NotNull;
-import tenniscourts.controllers.ReservationController;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import java.math.BigDecimal;
 import java.time.Duration;
@@ -86,7 +83,7 @@ public class Reservation extends SystemEntity {
      * @param end   of new interval
      * @return true if the given interval does not overlap with the reservation interval
      */
-    public boolean checkOverlap(LocalDateTime start, LocalDateTime end) {
+    public boolean withoutOverlap(LocalDateTime start, LocalDateTime end) {
         return start.isBefore(this.startDateTime) && end.isBefore(this.startDateTime)
                 || start.isAfter(this.startDateTime) && end.isAfter(this.endDateTime);
     }
@@ -111,10 +108,10 @@ public class Reservation extends SystemEntity {
         return playType;
     }
 
-    @Override
-    public String getRootName() {
-        return ReservationController.ROOT_NAME;
-    }
+    //@Override
+    //public String getRootName() {
+    //  return ReservationController.ROOT_NAME;
+    //}
 
     /**
      * @return price of the reservation for the time interval
