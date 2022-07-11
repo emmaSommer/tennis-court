@@ -23,7 +23,7 @@ public class Court extends SystemEntity {
 
     @ManyToOne
     @NotNull
-    private CourtType type;
+    private CourtType courtType;
 
 
     /**
@@ -32,7 +32,7 @@ public class Court extends SystemEntity {
      * @param type of the court
      */
     public Court(CourtType type) {
-        this.type = type;
+        this.courtType = type;
     }
 
     /**
@@ -44,15 +44,15 @@ public class Court extends SystemEntity {
 
     @Override
     public boolean isValid() {
-        return type != null && type.isValid();
+        return courtType != null && courtType.isValid();
     }
 
     public Long getId() {
         return id;
     }
 
-    public CourtType getType() {
-        return type;
+    public CourtType getCourtType() {
+        return courtType;
     }
 
     @Override
@@ -60,11 +60,11 @@ public class Court extends SystemEntity {
         return CourtController.ROOT_NAME;
     }
 
-    public void setType(CourtType type) {
-        if (type == null){
+    public void setCourtType(CourtType courtType) {
+        if (courtType == null){
             throw new IllegalArgumentException();
         }
-        this.type = type;
+        this.courtType = courtType;
     }
 
     public void setId(Long id) {
@@ -77,27 +77,28 @@ public class Court extends SystemEntity {
             throw new IllegalArgumentException();
         }
         Court newCourt = (Court) newEntity;
-        this.type = newCourt.getType();
+        this.courtType = newCourt.getCourtType();
     }
 
     @Override
     public String toString() {
         return "Court{" +
                 "id=" + id +
-                ", type=" + type +
+                ", type=" + courtType +
                 '}';
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)){
+            return false;
+        }
         Court court = (Court) o;
-        return Objects.equals(id, court.id) && Objects.equals(type, court.type);
+        return Objects.equals(id, court.id) && Objects.equals(courtType, court.courtType);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, type);
+        return Objects.hash(id, courtType);
     }
 }

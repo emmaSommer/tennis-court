@@ -105,8 +105,9 @@ public class CourtType extends SystemEntity {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)){
+            return false;
+        }
         CourtType courtType = (CourtType) o;
         return Objects.equals(id, courtType.id)
                 && Objects.equals(name, courtType.name)

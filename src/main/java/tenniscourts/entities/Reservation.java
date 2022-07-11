@@ -135,7 +135,7 @@ public class Reservation extends SystemEntity {
         BigDecimal minutes = BigDecimal.valueOf(
                 Duration.between(startDateTime, endDateTime).toMinutes());
 
-        BigDecimal price = court.getType().getPrice();
+        BigDecimal price = court.getCourtType().getPrice();
         if (playType == PlayType.DOUBLES_PLAY) {
             return price.multiply(minutes).multiply(BigDecimal.valueOf(1.5));
         }
@@ -204,10 +204,7 @@ public class Reservation extends SystemEntity {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
+        if (!super.equals(o)){
             return false;
         }
         Reservation that = (Reservation) o;

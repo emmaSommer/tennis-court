@@ -63,4 +63,19 @@ public abstract class SystemEntity {
      */
     public abstract boolean isValid();
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        SystemEntity entity = (SystemEntity) o;
+        return entity.getId() == null ||
+                this.getId() == null ||
+                entity.getId().equals(this.getId());
+
+    }
 }
