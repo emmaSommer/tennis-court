@@ -69,7 +69,7 @@ class ClientControllerTest {
     @Test
     void addEntity() {
 
-        Client newClient = controller.addEntity("Harry Potter", "123456789987").getContent();
+        Client newClient = controller.addEntity("Harry Potter", "123456789987");
         assertEquals(4, controller.getRepository().count());
         assertThat(newClient).isNotNull();
         assertEquals(newClient, controller.getEntity(newClient.getId()));

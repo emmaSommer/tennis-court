@@ -1,7 +1,5 @@
 package tenniscourts.controllers;
 
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,14 +20,17 @@ public class ClientController extends EntityController<Client> {
     public static final String ROOT_NAME = "users";
 
     private final ClientRepository repository;
+    private final ReservationController reservationController;
 
     /**
      * Constructor
      *
      * @param repository for Client entity
      */
-    public ClientController(ClientRepository repository) {
+    public ClientController(ClientRepository repository,
+                            ReservationController reservationController) {
         this.repository = repository;
+        this.reservationController = reservationController;
     }
 
     @Override
@@ -42,16 +43,9 @@ public class ClientController extends EntityController<Client> {
         return Client.ENTITY_NAME;
     }
 
-    @GetMapping("/users/{id}")
     @Override
-    public EntityModel<Client> getEntityModel(@PathVariable Long id) {
-        return super.getEntityModel(id);
-    }
-
-    @GetMapping("/users")
-    @Override
-    public CollectionModel<EntityModel<Client>> getAll() {
-        return super.getAll();
+    public String getRootName() {
+        return ROOT_NAME;
     }
 
     public Client getByPhoneNumber(String phoneNumber) {
@@ -77,9 +71,19 @@ public class ClientController extends EntityController<Client> {
      * @param phoneNumber of the Client
      * @return REST model of the new Client instance
      */
-    public EntityModel<Client> addEntity(String name, String phoneNumber) {
+    public Client addEntity(String name, String phoneNumber) {
         Client entity = new Client(name, phoneNumber);
         return super.addEntity(entity);
     }
 
+    @Override
+    public List<Client> deleteEntity(Long id) {
+        try {
+            reservationController.getWithClientId(id);
+            throw new IllegalArgumentException("Can't delete client with reservations");
+
+        } catch (EntityNotFoundException e){
+            return super.deleteEntity(id);
+        }
+    }
 }

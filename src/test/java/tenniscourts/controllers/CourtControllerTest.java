@@ -58,7 +58,7 @@ class CourtControllerTest {
     @Test
     void addEntity() {
         CourtType type = courtTypeController.getRepository().findAll().get(0);
-        Court newCourt = controller.addEntity(type).getContent();
+        Court newCourt = controller.addEntity(type);
         assertEquals(5, controller.getRepository().count());
         assertThat(newCourt).isNotNull();
         assertEquals(newCourt, controller.getEntity(newCourt.getId()));

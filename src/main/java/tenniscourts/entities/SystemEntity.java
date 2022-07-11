@@ -36,7 +36,8 @@ public abstract class SystemEntity {
         return CollectionModel.of(
                 entities.stream()
                         .map(entity -> SystemEntity.toModel(entity, controller))
-                        .collect(Collectors.toList())
+                        .collect(Collectors.toList()),
+                linkTo(methodOn(controller.getClass()).getCollectionModel()).withRel(controller.getRootName())
         );
     }
 

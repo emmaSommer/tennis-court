@@ -69,7 +69,8 @@ class ReservationControllerTest {
 
         assertThrows(EntityNotFoundException.class, () ->
                 controller.getEntityModel((long) -1));
-        controller.getEntityModel(null);
+        assertThrows(IllegalArgumentException.class, () ->
+                controller.getEntityModel(null));
     }
 
     @Test
@@ -83,11 +84,28 @@ class ReservationControllerTest {
                 time.plusHours(30),
                 time.plusHours(33),
                 court, client, PlayType.SINGLES_PLAY));
-        newReservation = controller.addEntity(newReservation).getContent();
+        newReservation = controller.addEntity(newReservation);
         assertEquals(8, controller.getRepository().count());
         assertThat(newReservation).isNotNull();
         assertEquals(newReservation, controller.getEntity(newReservation.getId()));
 
         controller.getRepository().delete(newReservation);
+    }
+
+
+    @Test
+    void getWithClientId() {
+        assertThrows(EntityNotFoundException.class,
+                () -> controller.getWithClientId(null));
+    }
+
+    @Test
+    void getWithCourtId() {
+        assertThrows(EntityNotFoundException.class,
+                () -> controller.getWithClientId(null));
+    }
+
+    @Test
+    void isAvailable() {
     }
 }

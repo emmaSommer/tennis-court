@@ -1,6 +1,5 @@
 package tenniscourts.controllers;
 
-import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,6 +11,7 @@ import tenniscourts.entities.Reservation;
 import tenniscourts.storage.ReservationRepository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * Entity controller for the Reservation class
@@ -40,28 +40,53 @@ public class ReservationController extends EntityController<Reservation> {
         return repository;
     }
 
-
     @Override
     public String getEntityName() {
         return Reservation.ENTITY_NAME;
     }
 
-    @GetMapping("/reservations/{id}")
     @Override
-    public EntityModel<Reservation> getEntityModel(@PathVariable Long id) {
-        return super.getEntityModel(id);
+    public String getRootName() {
+        return ROOT_NAME;
     }
 
-    @GetMapping("/reservations")
-    @Override
-    public CollectionModel<EntityModel<Reservation>> getAll() {
-        return super.getAll();
+
+    public List<Reservation> getWithClientId(Long clientId){
+
+        List<Reservation> reservations = repository.findAllByClient_Id(clientId);
+        if (reservations.isEmpty()){
+            throw new EntityNotFoundException("reservations for client: " + clientId);
+        }
+        return reservations;
     }
 
-    public EntityModel<Reservation> addEntity(LocalDateTime start, LocalDateTime end,
+    public List<Reservation> getWithCourtId(Long courtId){
+        List<Reservation> reservations = repository.findAllByCourt_Id(courtId);
+        if (reservations.isEmpty()){
+            throw new EntityNotFoundException("reservations for client: " + courtId);
+        }
+        return reservations;
+    }
+    public Reservation addEntity(LocalDateTime start, LocalDateTime end,
                                               Court court, PlayType playType,
                                               Client client) {
+
+        if (!isAvailable(start, end, court)) {
+            throw new IllegalArgumentException("Court is already booked for this time interval");
+        }
         Reservation reservation = new Reservation(start, end, court, client, playType);
         return super.addEntity(reservation);
+    }
+
+    public boolean isAvailable(LocalDateTime start, LocalDateTime end, Court court) {
+        List<Reservation> reservations = repository.findAllByCourt_Id(court.getId());
+        for (Reservation reservation : reservations
+        ) {
+            if (!reservation.checkOverlap(start, end)) {
+                return false;
+            }
+
+        }
+        return true;
     }
 }

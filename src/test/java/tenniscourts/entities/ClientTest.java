@@ -14,8 +14,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ClientTest {
 
     public static final Client VALID_CLIENT = new Client("Frodo", "123456789012");
-    private Client client = new Client("Frodo", "420903030030");
-
 
     @Test
     void validNumber() {
@@ -30,28 +28,30 @@ public class ClientTest {
 
     @Test
     void isValid() {
-        assertTrue(client.isValid());
-        client.setName(null);
-        assertFalse(client.isValid());
+        assertTrue(VALID_CLIENT.isValid());
+
+        Client client = new Client();
+        client.cloneAttributes(VALID_CLIENT);
+
         client.setName("  ");
         assertFalse(client.isValid());
+
         client.setName("Frodo");
         client.setPhoneNumber("");
         assertFalse(client.isValid());
-        client.setPhoneNumber("420903030030");
     }
 
     @Test
     void getRootName() {
-        assertThat(client.getRootName()).isEqualTo(ClientController.ROOT_NAME);
+        assertEquals(ClientController.ROOT_NAME, VALID_CLIENT.getRootName());
     }
 
     @Test
     void cloneAttributes() {
         Client duplicate = new Client("Henry", "123456789987");
-        duplicate.cloneAttributes(client);
-        assertEquals(duplicate.getName(), client.getName());
-        assertEquals(duplicate.getPhoneNumber(), client.getPhoneNumber());
+        duplicate.cloneAttributes(VALID_CLIENT);
+        assertEquals(duplicate.getName(), VALID_CLIENT.getName());
+        assertEquals(duplicate.getPhoneNumber(), VALID_CLIENT.getPhoneNumber());
 
         assertThrows(IllegalArgumentException.class, () ->
                 duplicate.cloneAttributes(new CourtType("default", BigDecimal.ONE)));

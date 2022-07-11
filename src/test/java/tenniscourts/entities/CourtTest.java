@@ -25,9 +25,7 @@ public class CourtTest {
         CourtType type = new CourtType("default", BigDecimal.ONE);
         Court court = new Court(type);
         assertTrue(court.isValid());
-        type.setName(null);
-        assertFalse(court.isValid());
-        court.setType(null);
+        type.setName("  ");
         assertFalse(court.isValid());
     }
 

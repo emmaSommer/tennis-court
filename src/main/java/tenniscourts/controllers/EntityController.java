@@ -1,15 +1,12 @@
 package tenniscourts.controllers;
 
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import tenniscourts.entities.SystemEntity;
 
 import java.util.List;
-import java.util.stream.Collectors;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 /**
  * Abstract class for managing system entities
@@ -23,11 +20,15 @@ public abstract class EntityController<T extends SystemEntity> {
      */
     public abstract String getEntityName();
 
+    public abstract String getRootName();
+
     public abstract JpaRepository<T, Long> getRepository();
 
     /**
      * @param id of the entity to be modeled
      * @return REST model of the entity
+     * @throws EntityNotFoundException if the entity does not
+     *                                 exist in the repository
      */
     public EntityModel<T> getEntityModel(Long id) {
         return SystemEntity.toModel(getEntity(id), this);
@@ -38,42 +39,62 @@ public abstract class EntityController<T extends SystemEntity> {
      * @return entity with the given id
      * @throws EntityNotFoundException if the entity does not
      *                                 exist in the repository
+     * @throws InvalidIdException      if the given id is null
      */
     public T getEntity(Long id) {
-        return getRepository().findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(getEntityName(), id));
+        try {
+            return getRepository().findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException(getEntityName(), id, "retrieving from repository"));
+        } catch (InvalidDataAccessApiUsageException e) {
+            throw new InvalidIdException("Accessing entity with null id\n" + e.getMessage());
+        }
+
+
+    }
+
+    /**
+     * @return list of all entities int the repository
+     * @throws EntityNotFoundException if the entity does not
+     *                                 exist in the repository
+     */
+    public List<T> getAll() {
+        List<T> entities = getRepository().findAll();
+        if (entities.isEmpty()) {
+            throw new EntityNotFoundException(getRootName());
+        }
+        return entities;
     }
 
     /**
      * @return REST model of a collection of all the
      * entities in the repository
+     * @throws EntityNotFoundException if the entity does not
+     *                                 exist in the repository
      */
-    public CollectionModel<EntityModel<T>> getAll() {
+    public CollectionModel<EntityModel<T>> getCollectionModel() {
         return SystemEntity.toCollectionModel(
-                this.getRepository().findAll(), this);
+                getAll(), this);
     }
 
     /**
      * @param entity to be added to the repository
-     * @return REST model of the new entity
+     * @return saved entity
+     * @throws InvalidIdException when the entity is not in a valid state
      */
-    public EntityModel<T> addEntity(T entity) {
+    public T addEntity(T entity) {
         if (entity == null || !entity.isValid()) {
-            // todo add error message
-            throw new IllegalArgumentException();
+            throw new InvalidEntityException(entity, "save into repository");
         }
-        entity = getRepository().save(entity);
-        return SystemEntity.toModel(entity, this);
+        return getRepository().save(entity);
     }
 
     /**
      * @param id of the entity to be deleted
-     * @return REST model of the collection without the
-     * deleted entity
+     * @return list of remaining entities
      */
-    public CollectionModel<EntityModel<T>> deleteEntity(Long id) {
+    public List<T> deleteEntity(Long id) {
         getRepository().deleteById(id);
-        return getAll();
+        return getRepository().findAll();
     }
 
     /**
@@ -82,12 +103,11 @@ public abstract class EntityController<T extends SystemEntity> {
      *
      * @param id        of the original entity
      * @param newEntity entity with attributes to be given to the original
-     * @return REST model of the updated entity
+     * @return updated entity
      */
-    public EntityModel<T> updateEntity(Long id, T newEntity) {
+    public T updateEntity(Long id, T newEntity) {
         if (newEntity == null || !newEntity.isValid()) {
-            // todo
-            throw new IllegalArgumentException();
+            throw new InvalidEntityException(newEntity, "clone attributes");
         }
         try {
             T entity = getEntity(id);
@@ -95,7 +115,8 @@ public abstract class EntityController<T extends SystemEntity> {
             return addEntity(entity);
 
         } catch (EntityNotFoundException e) {
-            throw new EntityNotFoundException("Attempting to update entity not found in repository");
+            throw new EntityNotFoundException(e.getEntityName(), e.getId(),
+                    "updating entity\n\t" + e.getMessage());
         }
     }
 

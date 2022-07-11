@@ -62,7 +62,7 @@ class CourtTypeControllerTest {
 
     @Test
     void addEntity() {
-        CourtType newType = controller.addEntity("new type", BigDecimal.valueOf(0.00)).getContent();
+        CourtType newType = controller.addEntity("new type", BigDecimal.valueOf(0.00));
         assertEquals(5, controller.getRepository().count() );
         assertThat(newType).isNotNull();
         assertEquals(newType, controller.getEntity(newType.getId()));

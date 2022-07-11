@@ -42,30 +42,13 @@ public class ReservationTest {
     void isValid() {
         Reservation reservation = new Reservation();
         reservation.cloneAttributes(VALID_RESERVATION);
+
         assertTrue(reservation.isValid());
-
-        reservation.setStartDateTime(null);
-        assertFalse(reservation.isValid());
-        reservation.setStartDateTime(VALID_RESERVATION.getStartDateTime());
-
-        reservation.setEndDateTime(null);
-        assertFalse(reservation.isValid());
-        reservation.setEndDateTime(VALID_RESERVATION.getEndDateTime());
-
-        reservation.setCourt(null);
-        assertFalse(reservation.isValid());
-        reservation.setCourt(VALID_RESERVATION.getCourt());
-
-        reservation.setClient(null);
-        assertFalse(reservation.isValid());
-        reservation.setClient(VALID_RESERVATION.getClient());
-
-        reservation.setPlayType(null);
-        assertFalse(reservation.isValid());
-        reservation.setPlayType(VALID_RESERVATION.getPlayType());
 
         reservation.setStartDateTime(VALID_RESERVATION.getEndDateTime());
         assertFalse(reservation.isValid());
+
+        assertFalse((new Reservation(null, null, null, null, null)).isValid());
     }
 
     @Test

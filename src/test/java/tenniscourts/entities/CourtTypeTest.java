@@ -19,12 +19,10 @@ public class CourtTypeTest {
         assertTrue(VALID_COURT_TYPE.isValid());
         CourtType type = new CourtType(null, null);
         assertFalse(type.isValid());
+        type.setPrice(BigDecimal.ZERO);
         type.setName("");
         assertFalse(type.isValid());
-        type.setName("name");
-        assertFalse(type.isValid());
-        type.setName(null);
-        type.setPrice(BigDecimal.ZERO);
+        type.setName("    ");
         assertFalse(type.isValid());
 
     }

@@ -22,4 +22,18 @@ public class ControllerExceptionHandler {
     public String entityNotFoundAdvice(EntityNotFoundException e) {
         return e.getMessage();
     }
+
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(InvalidIdException.class)
+    public String nullIdAdvice(InvalidIdException e){
+        return e.getMessage();
+    }
+
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(InvalidEntityException.class)
+    public String invalidEntity(InvalidIdException e){
+        return e.getMessage();
+    }
 }
