@@ -24,9 +24,7 @@ public class Reservation extends SystemEntity {
 
     public static final String ENTITY_NAME = "reservation";
     public static final int MAX_INTERVAL = 600;
-    @Id
-    @GeneratedValue
-    private Long id;
+
     @NotNull
     private LocalDateTime startDateTime;
     @NotNull
@@ -91,11 +89,6 @@ public class Reservation extends SystemEntity {
     public boolean checkOverlap(LocalDateTime start, LocalDateTime end) {
         return start.isBefore(this.startDateTime) && end.isBefore(this.startDateTime)
                 || start.isAfter(this.startDateTime) && end.isAfter(this.endDateTime);
-    }
-
-    @Override
-    public Long getId() {
-        return id;
     }
 
     public LocalDateTime getStartDateTime() {
@@ -204,12 +197,11 @@ public class Reservation extends SystemEntity {
 
     @Override
     public boolean equals(Object o) {
-        if (!super.equals(o)){
+        if (!super.equals(o)) {
             return false;
         }
         Reservation that = (Reservation) o;
-        return Objects.equals(id, that.id)
-                && Objects.equals(startDateTime, that.startDateTime)
+        return Objects.equals(startDateTime, that.startDateTime)
                 && Objects.equals(endDateTime, that.endDateTime)
                 && Objects.equals(court, that.court)
                 && Objects.equals(client, that.client)

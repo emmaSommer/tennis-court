@@ -4,6 +4,10 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import tenniscourts.controllers.EntityController;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
+
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -15,7 +19,12 @@ import java.util.stream.Collectors;
  *
  * @author Emma Sommerova
  */
+@MappedSuperclass
 public abstract class SystemEntity {
+
+    @GeneratedValue
+    @Id
+    Long id;
 
 
     /**
@@ -44,7 +53,16 @@ public abstract class SystemEntity {
     /**
      * @return unique identification of the entity
      */
-    public abstract Long getId();
+    public Long getId(){
+        return id;
+    }
+
+    public void setId(Long id) {
+        if (id != null){
+            throw new IllegalArgumentException("Id can't be set");
+        }
+        this.id = id;
+    }
 
     /**
      * @return name under which are entities aggregated

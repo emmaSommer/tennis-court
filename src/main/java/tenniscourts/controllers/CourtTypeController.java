@@ -7,7 +7,6 @@ import tenniscourts.exceptions.InvalidDeleteException;
 import tenniscourts.storage.CourtTypeRepository;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 /**
  * Entity controller for CourtType class
@@ -60,7 +59,7 @@ public class CourtTypeController extends EntityController<CourtType> {
     }
 
     @Override
-    public List<CourtType> deleteEntity(Long id) {
+    public CourtType deleteEntity(Long id) {
         try {
             courtController.getWithCourtType(id);
             throw new InvalidDeleteException("Deleting court type with existing courts");

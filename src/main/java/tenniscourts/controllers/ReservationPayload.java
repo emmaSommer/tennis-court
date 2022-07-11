@@ -16,6 +16,23 @@ public class ReservationPayload {
     private String clientName;
     private PlayType playType;
 
+    public ReservationPayload(LocalDateTime start,
+                              LocalDateTime end,
+                              Long courtId,
+                              String phoneNumber,
+                              String clientName,
+                              PlayType playType) {
+        this.start = start;
+        this.end = end;
+        this.courtId = courtId;
+        this.phoneNumber = phoneNumber;
+        this.clientName = clientName;
+        this.playType = playType;
+    }
+
+    public ReservationPayload() {
+    }
+
     public LocalDateTime getStart() {
         return start;
     }

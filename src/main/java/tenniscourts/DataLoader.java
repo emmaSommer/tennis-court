@@ -56,14 +56,10 @@ public class DataLoader {
         List<Reservation> reservations = new ArrayList<>();
         LocalDateTime start = LocalDateTime.now();
         LocalDateTime end = start.plusHours(1);
+        Client client = clients.get(0);
         for (Court court : courts
         ) {
-            for (Client client : clients
-            ) {
-                reservations.add(new Reservation(start, end, court, client, PlayType.SINGLES_PLAY));
-
-            }
-
+            reservations.add(new Reservation(start, end, court, client, PlayType.SINGLES_PLAY));
         }
         return reservations;
     }

@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.hateoas.EntityModel;
 import tenniscourts.entities.*;
 import tenniscourts.exceptions.EntityNotFoundException;
+import tenniscourts.exceptions.InvalidIdException;
 
 import java.time.LocalDateTime;
 
@@ -70,13 +71,13 @@ class ReservationControllerTest {
 
         assertThrows(EntityNotFoundException.class, () ->
                 controller.getEntityModel((long) -1));
-        assertThrows(IllegalArgumentException.class, () ->
+        assertThrows(InvalidIdException.class, () ->
                 controller.getEntityModel(null));
     }
 
     @Test
     void getAll() {
-        assertEquals(7, controller.getCollectionModel().getContent().size());
+        assertEquals(4, controller.getCollectionModel().getContent().size());
     }
 
     @Test
@@ -86,7 +87,7 @@ class ReservationControllerTest {
                 time.plusHours(33),
                 court, client, PlayType.SINGLES_PLAY));
         newReservation = controller.addEntity(newReservation);
-        assertEquals(8, controller.getRepository().count());
+        assertEquals(5, controller.getRepository().count());
         assertThat(newReservation).isNotNull();
         assertEquals(newReservation, controller.getEntity(newReservation.getId()));
 

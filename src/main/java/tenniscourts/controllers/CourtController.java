@@ -73,7 +73,7 @@ public class CourtController extends EntityController<Court> {
     }
 
     @Override
-    public List<Court> deleteEntity(Long id) {
+    public Court deleteEntity(Long id) {
         try {
             reservationController.getWithCourtId(id);
             throw new InvalidDeleteException("Deleting courts with existing reservations");

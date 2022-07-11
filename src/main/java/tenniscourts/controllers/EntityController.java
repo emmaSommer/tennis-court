@@ -93,14 +93,18 @@ public abstract class EntityController<T extends SystemEntity> {
 
     /**
      * @param id of the entity to be deleted
-     * @return list of remaining entities
+     * @return deleted entity
      */
-    public List<T> deleteEntity(Long id) {
-        if (!getRepository().existsById(id)) {
+    public T deleteEntity(Long id) {
+        try {
+            T entity = getEntity(id);
+            getRepository().deleteById(id);
+            entity.setId(null);
+            return entity;
+        } catch (EntityNotFoundException | InvalidIdException e ){
             throw new InvalidDeleteException(id, getRootName());
         }
-        getRepository().deleteById(id);
-        return getRepository().findAll();
+
     }
 
     /**

@@ -39,7 +39,7 @@ public class ControllerExceptionHandler {
 
     @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(InvalidEntityException.class)
+    @ExceptionHandler(InvalidDeleteException.class)
     public String invalidDelete(InvalidDeleteException e) {
         return e.getMessage();
     }

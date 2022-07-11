@@ -18,9 +18,6 @@ public class Client extends SystemEntity {
 
     public static final String ENTITY_NAME = "client";
 
-    @Id
-    @GeneratedValue
-    private Long id;
     @NotNull
     private String name;
     @Column(unique = true)
@@ -54,11 +51,6 @@ public class Client extends SystemEntity {
     public boolean isValid() {
         return name != null && !name.isBlank()
                 && validNumber(phoneNumber);
-    }
-
-    @Override
-    public Long getId() {
-        return id;
     }
 
     public String getName() {
@@ -114,8 +106,7 @@ public class Client extends SystemEntity {
             return false;
         }
         Client client = (Client) o;
-        return Objects.equals(id, client.id)
-                && Objects.equals(name, client.name)
+        return  Objects.equals(name, client.name)
                 && Objects.equals(phoneNumber, client.phoneNumber);
     }
 

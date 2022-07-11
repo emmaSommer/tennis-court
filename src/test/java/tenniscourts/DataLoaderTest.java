@@ -31,7 +31,7 @@ class DataLoaderTest {
         assertThat(courtController.getRepository().count()).isEqualTo(3);
         assertThat(courtTypeController.getRepository().count()).isEqualTo(3);
         assertThat(clientController.getRepository().count()).isEqualTo(2);
-        assertThat(reservationController.getRepository().count()).isEqualTo(6);
+        assertThat(reservationController.getRepository().count()).isEqualTo(3);
 
     }
 }

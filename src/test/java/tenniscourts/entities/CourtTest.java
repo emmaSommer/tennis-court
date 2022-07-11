@@ -40,7 +40,7 @@ public class CourtTest {
         Court duplicate = new Court(duplicateType);
 
         duplicate.cloneAttributes(court);
-        assertEquals(duplicate.getType(), court.getType());
+        assertEquals(duplicate.getCourtType(), court.getCourtType());
 
         assertThrows(IllegalArgumentException.class, () ->
                 duplicate.cloneAttributes(ClientTest.VALID_CLIENT));

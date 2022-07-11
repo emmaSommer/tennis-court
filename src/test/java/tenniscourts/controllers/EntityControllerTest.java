@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import tenniscourts.entities.Reservation;
 import tenniscourts.exceptions.EntityNotFoundException;
+import tenniscourts.exceptions.InvalidIdException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,7 +32,7 @@ class EntityControllerTest {
     @Test
     void getAll() {
         List<Reservation> reservations = reservationController.getAll();
-        assertEquals(6, reservations.size());
+        assertEquals(3, reservations.size());
 
         reservationController.getRepository().deleteAll();
         assertThrows(EntityNotFoundException.class,
@@ -42,7 +43,7 @@ class EntityControllerTest {
 
     @Test
     void getEntity(){
-        assertThrows(IllegalArgumentException.class, () -> reservationController.getEntity(null));
+        assertThrows(InvalidIdException.class, () -> reservationController.getEntity(null));
     }
 
 

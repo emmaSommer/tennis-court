@@ -20,9 +20,6 @@ public class CourtType extends SystemEntity {
 
     public static final String ENTITY_NAME = "court_type";
 
-    @Id
-    @GeneratedValue
-    private Long id;
     @NotNull
     private String name;
     @NotNull
@@ -51,10 +48,6 @@ public class CourtType extends SystemEntity {
     public boolean isValid() {
         return name != null && !name.isBlank()
                 && price != null;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public String getName() {
@@ -109,8 +102,7 @@ public class CourtType extends SystemEntity {
             return false;
         }
         CourtType courtType = (CourtType) o;
-        return Objects.equals(id, courtType.id)
-                && Objects.equals(name, courtType.name)
+        return Objects.equals(name, courtType.name)
                 && price.compareTo(courtType.price) == 0;
     }
 

@@ -17,10 +17,6 @@ public class Court extends SystemEntity {
 
     public static final String ENTITY_NAME = "court";
 
-    @Id
-    @GeneratedValue
-    private Long id;
-
     @ManyToOne
     @NotNull
     private CourtType courtType;
@@ -45,10 +41,6 @@ public class Court extends SystemEntity {
     @Override
     public boolean isValid() {
         return courtType != null && courtType.isValid();
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public CourtType getCourtType() {
@@ -94,7 +86,7 @@ public class Court extends SystemEntity {
             return false;
         }
         Court court = (Court) o;
-        return Objects.equals(id, court.id) && Objects.equals(courtType, court.courtType);
+        return  Objects.equals(courtType, court.courtType);
     }
 
     @Override

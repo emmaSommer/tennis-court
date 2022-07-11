@@ -79,7 +79,7 @@ public class ClientController extends EntityController<Client> {
     }
 
     @Override
-    public List<Client> deleteEntity(Long id) {
+    public Client deleteEntity(Long id) {
         try {
             reservationController.getWithClientId(id);
             throw new InvalidDeleteException("Deleting client with existing reservation");
