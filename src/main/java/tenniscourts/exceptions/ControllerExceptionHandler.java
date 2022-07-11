@@ -1,4 +1,4 @@
-package tenniscourts.controllers;
+package tenniscourts.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -26,14 +26,21 @@ public class ControllerExceptionHandler {
     @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(InvalidIdException.class)
-    public String nullIdAdvice(InvalidIdException e){
+    public String nullIdAdvice(InvalidIdException e) {
         return e.getMessage();
     }
 
     @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(InvalidEntityException.class)
-    public String invalidEntity(InvalidIdException e){
+    public String invalidEntity(InvalidIdException e) {
+        return e.getMessage();
+    }
+
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(InvalidEntityException.class)
+    public String invalidDelete(InvalidDeleteException e) {
         return e.getMessage();
     }
 }

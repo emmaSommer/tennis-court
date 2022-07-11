@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import tenniscourts.entities.CourtType;
 import tenniscourts.entities.CourtTypeTest;
+import tenniscourts.exceptions.EntityNotFoundException;
 
 import java.math.BigDecimal;
 

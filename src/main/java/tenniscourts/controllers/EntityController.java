@@ -5,6 +5,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import tenniscourts.entities.SystemEntity;
+import tenniscourts.exceptions.EntityNotFoundException;
+import tenniscourts.exceptions.InvalidDeleteException;
+import tenniscourts.exceptions.InvalidEntityException;
+import tenniscourts.exceptions.InvalidIdException;
 
 import java.util.List;
 
@@ -16,7 +20,7 @@ import java.util.List;
 public abstract class EntityController<T extends SystemEntity> {
 
     /**
-     * @return entity managed by the controller
+     * @return name of entity managed by the controller
      */
     public abstract String getEntityName();
 
@@ -54,8 +58,7 @@ public abstract class EntityController<T extends SystemEntity> {
 
     /**
      * @return list of all entities int the repository
-     * @throws EntityNotFoundException if the entity does not
-     *                                 exist in the repository
+     * @throws EntityNotFoundException if the repository is emptz
      */
     public List<T> getAll() {
         List<T> entities = getRepository().findAll();
@@ -93,13 +96,15 @@ public abstract class EntityController<T extends SystemEntity> {
      * @return list of remaining entities
      */
     public List<T> deleteEntity(Long id) {
+        if (!getRepository().existsById(id)) {
+            throw new InvalidDeleteException(id, getRootName());
+        }
         getRepository().deleteById(id);
         return getRepository().findAll();
     }
 
     /**
-     * Updated values in the entity in the repository with the given id
-     * if the entity does not exists saves the newEntity into the repository
+     * Update values in the entity in the repository with the given id
      *
      * @param id        of the original entity
      * @param newEntity entity with attributes to be given to the original
@@ -109,14 +114,14 @@ public abstract class EntityController<T extends SystemEntity> {
         if (newEntity == null || !newEntity.isValid()) {
             throw new InvalidEntityException(newEntity, "clone attributes");
         }
+
         try {
             T entity = getEntity(id);
             entity.cloneAttributes(newEntity);
             return addEntity(entity);
 
         } catch (EntityNotFoundException e) {
-            throw new EntityNotFoundException(e.getEntityName(), e.getId(),
-                    "updating entity\n\t" + e.getMessage());
+            throw new EntityNotFoundException(getEntityName(), id, "updating entity\n\t");
         }
     }
 

@@ -1,9 +1,9 @@
 package tenniscourts.controllers;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import tenniscourts.entities.Client;
+import tenniscourts.exceptions.EntityNotFoundException;
+import tenniscourts.exceptions.InvalidDeleteException;
 import tenniscourts.storage.ClientRepository;
 
 import java.util.List;
@@ -48,10 +48,12 @@ public class ClientController extends EntityController<Client> {
         return ROOT_NAME;
     }
 
+    /**
+     * @param phoneNumber of the wanted client
+     * @return client instance with the given phone number
+     * @throws EntityNotFoundException if there is no record with the given number
+     */
     public Client getByPhoneNumber(String phoneNumber) {
-        if (!Client.validNumber(phoneNumber)) {
-            throw new IllegalArgumentException("Can not find client with invalid number: " + phoneNumber);
-        }
         List<Client> clients = repository.findByPhoneNumber(phoneNumber);
         if (clients.isEmpty()) {
             throw new EntityNotFoundException("Client with number: " + phoneNumber + " is not in repository");
@@ -69,7 +71,7 @@ public class ClientController extends EntityController<Client> {
      *
      * @param name        of the Client
      * @param phoneNumber of the Client
-     * @return REST model of the new Client instance
+     * @return new Client instance saved into the repository
      */
     public Client addEntity(String name, String phoneNumber) {
         Client entity = new Client(name, phoneNumber);
@@ -80,9 +82,9 @@ public class ClientController extends EntityController<Client> {
     public List<Client> deleteEntity(Long id) {
         try {
             reservationController.getWithClientId(id);
-            throw new IllegalArgumentException("Can't delete client with reservations");
+            throw new InvalidDeleteException("Deleting client with existing reservation");
 
-        } catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             return super.deleteEntity(id);
         }
     }

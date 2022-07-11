@@ -1,10 +1,9 @@
 package tenniscourts.controllers;
 
-import org.springframework.hateoas.EntityModel;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import tenniscourts.entities.CourtType;
+import tenniscourts.exceptions.EntityNotFoundException;
+import tenniscourts.exceptions.InvalidDeleteException;
 import tenniscourts.storage.CourtTypeRepository;
 
 import java.math.BigDecimal;
@@ -53,7 +52,7 @@ public class CourtTypeController extends EntityController<CourtType> {
     /**
      * @param name  of the new type of court
      * @param price for a reservation for one hour
-     * @return REST model of the new CourtType model
+     * @return new CourtType instance
      */
     public CourtType addEntity(String name, BigDecimal price) {
         CourtType courtType = new CourtType(name, price);
@@ -64,7 +63,7 @@ public class CourtTypeController extends EntityController<CourtType> {
     public List<CourtType> deleteEntity(Long id) {
         try {
             courtController.getWithCourtType(id);
-            throw new IllegalArgumentException("Can't delete court type with existing courts");
+            throw new InvalidDeleteException("Deleting court type with existing courts");
         } catch (EntityNotFoundException e) {
             return super.deleteEntity(id);
         }

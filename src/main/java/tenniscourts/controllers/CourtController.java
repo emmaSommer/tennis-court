@@ -1,14 +1,11 @@
 package tenniscourts.controllers;
 
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import tenniscourts.entities.CourtType;
 import tenniscourts.entities.Court;
-import tenniscourts.entities.Reservation;
+import tenniscourts.exceptions.EntityNotFoundException;
+import tenniscourts.exceptions.InvalidDeleteException;
 import tenniscourts.storage.CourtRepository;
 
 import java.util.List;
@@ -27,6 +24,7 @@ public class CourtController extends EntityController<Court> {
 
     private final CourtRepository repository;
     private final ReservationController reservationController;
+
     /**
      * Constructor
      *
@@ -53,17 +51,21 @@ public class CourtController extends EntityController<Court> {
         return ROOT_NAME;
     }
 
-    public List<Court> getWithCourtType(Long id){
+    /**
+     * @param id courtType id
+     * @return list of courts with the given court type
+     */
+    public List<Court> getWithCourtType(Long id) {
         List<Court> courts = repository.findAllByCourtType_Id(id);
-        if (courts.isEmpty()){
-            throw new EntityNotFoundException("Can't find courts with type id: " + id);
+        if (courts.isEmpty()) {
+            throw new EntityNotFoundException("Can't find courts with courtType id: " + id);
         }
         return courts;
     }
 
     /**
      * @param courtType of the new Court instance
-     * @return REST model of the new instance
+     * @return new instance of Court saved into the repository
      */
     public Court addEntity(CourtType courtType) {
         Court court = new Court(courtType);
@@ -74,10 +76,10 @@ public class CourtController extends EntityController<Court> {
     public List<Court> deleteEntity(Long id) {
         try {
             reservationController.getWithCourtId(id);
-            throw new IllegalArgumentException("Cant delete court with reservations");
-        } catch (EntityNotFoundException e){
-            return super.deleteEntity(id);
+            throw new InvalidDeleteException("Deleting courts with existing reservations");
 
+        } catch (EntityNotFoundException e) {
+            return super.deleteEntity(id);
         }
     }
 }

@@ -1,4 +1,4 @@
-package tenniscourts.controllers;
+package tenniscourts.exceptions;
 
 /**
  * @author Emma Sommerova

@@ -6,9 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import tenniscourts.entities.Court;
-import tenniscourts.entities.CourtTest;
 import tenniscourts.entities.CourtType;
-import tenniscourts.storage.CourtRepository;
+import tenniscourts.exceptions.EntityNotFoundException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
