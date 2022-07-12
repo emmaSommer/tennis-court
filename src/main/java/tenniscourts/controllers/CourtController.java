@@ -1,7 +1,10 @@
 package tenniscourts.controllers;
 
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-
 import tenniscourts.entities.CourtType;
 import tenniscourts.entities.Court;
 import tenniscourts.entities.Reservation;
@@ -59,7 +62,7 @@ public class CourtController extends EntityController<Court> {
     public List<Court> getWithCourtType(Long id) {
         List<Court> courts = repository.findAllByCourtType_Id(id);
         if (courts.isEmpty()) {
-            throw new EntityNotFoundException(getRootName() + " with court type id: " + id);
+            throw new EntityNotFoundException(getRootName() + " with court type id: '" + id + "'");
         }
         return courts;
     }
@@ -82,5 +85,17 @@ public class CourtController extends EntityController<Court> {
         } catch (EntityNotFoundException e) {
             return super.deleteEntity(id);
         }
+    }
+
+    @GetMapping("/" + ROOT_NAME + "/{id}")
+    @Override
+    public EntityModel<Court> getEntityModel(@PathVariable Long id) {
+        return super.getEntityModel(id);
+    }
+
+    @GetMapping("/" + ROOT_NAME)
+    @Override
+    public CollectionModel<EntityModel<Court>> getCollectionModel() {
+        return super.getCollectionModel();
     }
 }

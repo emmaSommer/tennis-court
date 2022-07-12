@@ -11,7 +11,7 @@ public class EntityNotFoundException extends RuntimeException {
 
     public EntityNotFoundException(String entityName, Long id, String action) {
         super("Could not find " + entityName +
-                " with id: " + id + "\n" +
+                " with id: '" + id + "'\n" +
                 "can't perform action: " + action);
     }
 

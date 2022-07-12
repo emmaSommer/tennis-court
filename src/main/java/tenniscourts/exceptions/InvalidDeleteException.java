@@ -9,6 +9,6 @@ public class InvalidDeleteException extends RuntimeException {
     }
 
     public InvalidDeleteException(Long id, String repoName) {
-        super("Id: " + id + " doesn't exist in " + repoName);
+        super("Id: '" + id + "' doesn't exist in " + repoName);
     }
 }

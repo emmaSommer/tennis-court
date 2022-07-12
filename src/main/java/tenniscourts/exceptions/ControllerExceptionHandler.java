@@ -1,5 +1,6 @@
 package tenniscourts.exceptions;
 
+import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  */
 
 @ControllerAdvice
-public class ControllerExceptionHandler {
+public class ControllerExceptionHandler implements ErrorController {
 
     @ResponseBody
     @ResponseStatus(HttpStatus.NOT_FOUND)
@@ -50,4 +51,5 @@ public class ControllerExceptionHandler {
     public String invalidRequestMessage(InvalidRequestException e) {
         return e.getMessage();
     }
+
 }

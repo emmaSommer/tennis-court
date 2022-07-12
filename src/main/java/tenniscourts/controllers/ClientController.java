@@ -1,5 +1,9 @@
 package tenniscourts.controllers;
 
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import tenniscourts.entities.Client;
 import tenniscourts.entities.Reservation;
@@ -57,10 +61,10 @@ public class ClientController extends EntityController<Client> {
     public Client getByPhoneNumber(String phoneNumber) {
         List<Client> clients = repository.findByPhoneNumber(phoneNumber);
         if (clients.isEmpty()) {
-            throw new EntityNotFoundException("Client with number: " + phoneNumber + " is not in repository");
+            throw new EntityNotFoundException("Client with number: '" + phoneNumber + "' is not in repository");
         }
         if (clients.size() > 1) {
-            throw new IllegalStateException("Duplicate number in database: " + phoneNumber);
+            throw new IllegalStateException("Duplicate number in database: '" + phoneNumber + "'");
         }
         return clients.get(0);
     }
@@ -88,5 +92,17 @@ public class ClientController extends EntityController<Client> {
         } catch (EntityNotFoundException e) {
             return super.deleteEntity(id);
         }
+    }
+
+    @GetMapping("/" + ROOT_NAME + "/{id}")
+    @Override
+    public EntityModel<Client> getEntityModel(@PathVariable Long id) {
+        return super.getEntityModel(id);
+    }
+
+    @GetMapping("/" + ROOT_NAME)
+    @Override
+    public CollectionModel<EntityModel<Client>> getCollectionModel() {
+        return super.getCollectionModel();
     }
 }

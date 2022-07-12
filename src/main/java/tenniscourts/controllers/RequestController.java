@@ -24,14 +24,17 @@ public class RequestController {
 
     private final ClientController clientController;
     private final CourtController courtController;
+    private final CourtTypeController courtTypeController;
     private final ReservationController reservationController;
 
 
     public RequestController(ClientController clientController,
                              CourtController courtController,
+                             CourtTypeController courtTypeController,
                              ReservationController reservationController) {
         this.clientController = clientController;
         this.courtController = courtController;
+        this.courtTypeController = courtTypeController;
         this.reservationController = reservationController;
     }
 
@@ -39,7 +42,7 @@ public class RequestController {
      * @return courts in the system
      * @throws EntityNotFoundException if there are no courts
      */
-    @GetMapping("/" + CourtController.ROOT_NAME)
+    @GetMapping("/all_" + CourtController.ROOT_NAME)
     public CollectionModel<EntityModel<Court>> getCourts() {
         return courtController.getCollectionModel();
     }
@@ -68,7 +71,7 @@ public class RequestController {
     public CollectionModel<EntityModel<Reservation>> getReservations(@PathVariable String phoneNumber) {
         Client client = clientController.getByPhoneNumber(phoneNumber);
         CollectionModel<EntityModel<Reservation>> model = SystemEntity.toCollectionModel(
-                reservationController.getRepository().findAllByClient_Id(client.getId()), reservationController);
+                reservationController.getWithClientId(client.getId()), reservationController);
         return model.add(
                 linkTo(methodOn(RequestController.class).getReservations(phoneNumber)).withSelfRel());
     }
@@ -110,7 +113,8 @@ public class RequestController {
         try {
             Client client = clientController.getByPhoneNumber(number);
             if (!client.getName().equals(name)) {
-                throw new InvalidEntityException("Phone number is associated with different name");
+                throw new InvalidEntityException("Phone number '" + number
+                        + "' is already associated with name '" + client.getName() + "'");
             }
             return client;
 

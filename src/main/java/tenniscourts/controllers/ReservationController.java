@@ -1,5 +1,9 @@
 package tenniscourts.controllers;
 
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import tenniscourts.entities.Client;
 import tenniscourts.entities.Court;
@@ -59,7 +63,7 @@ public class ReservationController extends EntityController<Reservation> {
     public List<Reservation> getWithClientId(Long clientId) {
         List<Reservation> reservations = repository.findAllByClient_Id(clientId);
         if (reservations.isEmpty()) {
-            throw new EntityNotFoundException("reservations for client with id: " + clientId);
+            throw new EntityNotFoundException("reservations for client with id: \"" + clientId + "\"");
         }
         return reservations;
     }
@@ -72,7 +76,7 @@ public class ReservationController extends EntityController<Reservation> {
     public List<Reservation> getWithCourtId(Long courtId) {
         List<Reservation> reservations = repository.findAllByCourt_Id(courtId);
         if (reservations.isEmpty()) {
-            throw new EntityNotFoundException("reservations for client with id: " + courtId);
+            throw new EntityNotFoundException("reservations for court with id: \"" + courtId + "\"");
         }
         return reservations;
     }
@@ -120,5 +124,17 @@ public class ReservationController extends EntityController<Reservation> {
             }
         }
         return false;
+    }
+
+    @GetMapping("/" + ROOT_NAME + "/{id}")
+    @Override
+    public EntityModel<Reservation> getEntityModel(@PathVariable Long id) {
+        return super.getEntityModel(id);
+    }
+
+    @GetMapping("/" + ROOT_NAME)
+    @Override
+    public CollectionModel<EntityModel<Reservation>> getCollectionModel() {
+        return super.getCollectionModel();
     }
 }

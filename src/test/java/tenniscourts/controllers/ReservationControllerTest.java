@@ -106,7 +106,7 @@ class ReservationControllerTest {
     @Test
     void getWithCourtId() {
         assertThrows(EntityNotFoundException.class,
-                () -> controller.getWithClientId(null));
+                () -> controller.getWithCourtId(null));
     }
 
     @Test
