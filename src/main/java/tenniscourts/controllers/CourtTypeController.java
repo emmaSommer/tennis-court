@@ -5,62 +5,84 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import tenniscourts.entities.Court;
 import tenniscourts.entities.CourtType;
+import tenniscourts.exceptions.EntityNotFoundException;
+import tenniscourts.exceptions.InvalidDeleteException;
 import tenniscourts.storage.CourtTypeRepository;
 
 import java.math.BigDecimal;
-import java.util.Optional;
+import java.util.List;
 
 /**
+ * Entity controller for CourtType class
+ *
  * @author Emma Sommerova
  */
 
 @RestController
 public class CourtTypeController extends EntityController<CourtType> {
 
-    public CourtTypeController(CourtTypeRepository repository) {
-        super(repository);
+    public static final String ROOT_NAME = "court_types";
+
+    private final CourtTypeRepository repository;
+    private final CourtController courtController;
+
+    /**
+     * Constructor
+     *
+     * @param repository for the CourtType entity
+     */
+    public CourtTypeController(CourtTypeRepository repository,
+                               CourtController courtController) {
+        this.repository = repository;
+        this.courtController = courtController;
     }
 
-
-    @GetMapping("/court_types")
     @Override
-    public CollectionModel<EntityModel<CourtType>> getAll() {
-        return super.getAll();
+    public CourtTypeRepository getRepository() {
+        return repository;
+    }
+
+    @Override
+    public String getEntityName() {
+        return CourtType.ENTITY_NAME;
     }
 
     @Override
     public String getRootName() {
-        return "court_types";
+        return ROOT_NAME;
     }
 
-    @GetMapping("/court_types/{id}")
-    @Override
-    public EntityModel<CourtType> getEntityModel(@PathVariable Long id) {
-        return super.getEntityModel(id);
-    }
-
-
-    public EntityModel<CourtType> addEntity(String name, BigDecimal price){
+    /**
+     * @param name  of the new type of court
+     * @param price for a reservation for one hour
+     * @return new CourtType instance
+     */
+    public CourtType addEntity(String name, BigDecimal price) {
         CourtType courtType = new CourtType(name, price);
         return super.addEntity(courtType);
     }
 
     @Override
-    public CollectionModel<EntityModel<CourtType>> deleteEntity(Long id) {
-        // TODO check if no courts exist
-        return super.deleteEntity(id);
+    public CourtType deleteEntity(Long id) {
+        try {
+            List<Court> courts = courtController.getWithCourtType(id);
+            throw new InvalidDeleteException("Deleting court type with existing courts\n\t" + courts);
+        } catch (EntityNotFoundException e) {
+            return super.deleteEntity(id);
+        }
     }
 
+    @GetMapping("/" + ROOT_NAME + "/{id}")
     @Override
-    public EntityModel<CourtType> updateEntity(Long id, CourtType newEntity) {
-        Optional<CourtType> oldEntity = super.getRepository().findById(id);
-        if (oldEntity.isEmpty()){
-            return super.addEntity(newEntity);
-        }
-        CourtType entity = oldEntity.orElseThrow();
-        entity.setName(newEntity.getName());
-        entity.setPrice(newEntity.getPrice());
-        return super.addEntity(entity);
+    public EntityModel<CourtType> getEntityModel(@PathVariable Long id) {
+        return super.getEntityModel(id);
+    }
+
+    @GetMapping("/" + ROOT_NAME)
+    @Override
+    public CollectionModel<EntityModel<CourtType>> getCollectionModel() {
+        return super.getCollectionModel();
     }
 }
